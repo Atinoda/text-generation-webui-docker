@@ -12,7 +12,6 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install --upgrade pip setuptools && \
     pip3 install torch torchvision torchaudio
 
-
 FROM env_base AS app_base 
 ### DEVELOPERS/ADVANCED USERS ###
 # Clone oobabooga/text-generation-webui
@@ -36,7 +35,7 @@ ARG TORCH_CUDA_ARCH_LIST="6.1;7.0;7.5;8.0;8.6+PTX"
 RUN cd /app/repositories/GPTQ-for-LLaMa/ && python3 setup_cuda.py install
 
 
-FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04 AS base
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS base
 # Runtime pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-venv git
@@ -61,7 +60,6 @@ RUN chmod +x /scripts/docker-entrypoint.sh
 ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
 
 
-
 # VARIANT BUILDS
 FROM base AS cuda
 RUN echo "CUDA" >> /variant.txt
@@ -73,7 +71,6 @@ RUN pip3 uninstall -y quant-cuda && \
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
-
 FROM base AS triton
 RUN echo "TRITON" >> /variant.txt
 RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
@@ -84,6 +81,14 @@ RUN pip3 uninstall -y quant-cuda && \
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
+FROM base AS llama-cublas
+RUN echo "LLAMA-CUBLAS" >> /variant.txt
+RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
+ENV LLAMA_CUBLAS=1
+RUN pip uninstall -y llama-cpp-python && \
+    CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py"]
 
 FROM base AS default
 RUN echo "DEFAULT" >> /variant.txt

@@ -1,10 +1,10 @@
 # Introduction
-This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., the more recent `triton` and `cuda` branches of GPTQ).
+This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., latest `llama-cpp-python` with GPU offloading, the more recent `triton` and `cuda` branches of GPTQ).
 
 *This goal of this project is to be to [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), what [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) is to [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).*
 
 # Usage
-*This project currently supports Linux as the deployment platform.*
+*This project currently supports Linux as the deployment platform. It will also probably work using WSL2.*
 
 ## Pre-Requisites
 - docker
@@ -22,8 +22,8 @@ Choose the desired variant by setting the build `target` in `docker-compose.yml`
 | `default` | Minimal implementation of the default deployment from source.  |
 | `triton` | Updated GPTQ using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. |
 | `cuda` | Updated GPTQ using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. |
-
-*See: [oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md) for more information on variants.*
+| `llama-cublas` | CUDA GPU offloading enabled for llama-cpp. Use by setting option `n-gpu-layers` > 0. |
+*See: [oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md) and [obabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md) for more information on variants.*
 
 ### Build
 Build the image:
