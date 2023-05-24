@@ -1,8 +1,2 @@
 _non
-config/loras/*
-config/models/*
-config/presets/*
-config/prompts/*
-config/softprompts/*
-config/training/*
 text-generation-webui/

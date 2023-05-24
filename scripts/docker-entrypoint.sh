@@ -10,10 +10,11 @@ function ctrl_c {
 trap ctrl_c SIGTERM SIGINT SIGQUIT SIGHUP
 
 # Generate default configs if empty
-CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "softprompts" "training")
+CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "softprompts" "training/datasets" "training/formats")
 for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
-  if [ -z "$(ls -A /app/"$config_dir")" ]; then
-    cp -ar /src/"$config_dir" /app/
+  if [ -z "$(ls /app/"$config_dir")" ]; then
+    echo "*** Initialising config for: '$config_dir' ***"
+    cp -ar /src/"$config_dir"/* /app/"$config_dir"/
     chown -R 1000:1000 /app/"$config_dir"  # Not ideal... but convenient.
   fi
 done
