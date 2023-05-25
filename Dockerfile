@@ -90,6 +90,16 @@ RUN pip uninstall -y llama-cpp-python && \
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
+FROM base AS monkey-patch
+RUN echo "4-BIT MONKEY-PATCH" >> /variant.txt
+RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
+RUN git clone https://github.com/johnsmith0031/alpaca_lora_4bit /app/repositories/alpaca_lora_4bit && \
+    cd /app/repositories/alpaca_lora_4bit && git checkout 2f704b93c961bf202937b10aac9322b092afdce0
+ARG TORCH_CUDA_ARCH_LIST="8.6"
+RUN pip install git+https://github.com/sterlind/GPTQ-for-LLaMa.git@lora_4bit
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py", "--monkey-patch"]
+
 FROM base AS default
 RUN echo "DEFAULT" >> /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
