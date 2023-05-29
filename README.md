@@ -19,10 +19,10 @@ Choose the desired variant by setting the build `target` in `docker-compose.yml`
 
 | Variant | Description | 
 |---|---|
-| `default` | Minimal implementation of the default deployment from source.  |
+| `default` | Implementation of the vanilla deployment from source. Also includes pre-installed `auto-gptq`.  |
 | `triton` | Updated GPTQ using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. |
 | `cuda` | Updated GPTQ using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. |
-| `monkey-patch` | Use LoRas in 4-Bit GPTQ mode. |
+| `monkey-patch` | Use LoRAs in 4-Bit GPTQ mode. |
 | `llama-cublas` | CUDA GPU offloading enabled for llama-cpp. Use by setting option `n-gpu-layers` > 0. |
 
 *See: [oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md) and [obabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md) for more information on variants.*
@@ -50,11 +50,11 @@ These configuration instructions describe the relevant details for this docker w
 ### Ports
 Three commonly used ports are exposed:
 
-|  Port  | Description |
-|  ----  | ----------- |
-| `7860` | Web UI port |
-| `5000` | API port    |
-| `5005` | Streaming port |
+|  Port  | Description | Configuration |
+|  ----  | ----------- | ------------- |
+| `7860` | Web UI port | Pre-configured and enabled in `docker-compose.yml` |
+| `5000` | API port    | Enable by adding launch arg `--api` then uncomment mapping in `docker-compose.yml` |
+| `5005` | Streaming port | Enable by adding launch arg `--api` then uncomment mapping in `docker-compose.yml` |
 
 *Extensions may use additional ports - check the application documentation for more details.*
 
