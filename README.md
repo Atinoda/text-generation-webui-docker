@@ -19,7 +19,7 @@ Choose the desired variant by setting the build `target` in `docker-compose.yml`
 
 | Variant | Description | 
 |---|---|
-| `default` | Implementation of the vanilla deployment from source. Also includes pre-installed `auto-gptq`.  |
+| `default` | Implementation of the vanilla deployment from source. Also includes pre-installed `AutoGPTQ` library from `PanQiWei/AutoGPTQ`.  |
 | `triton` | Updated GPTQ using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. |
 | `cuda` | Updated GPTQ using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. |
 | `monkey-patch` | Use LoRAs in 4-Bit GPTQ mode. |
