@@ -70,6 +70,7 @@ RUN apt-get install --no-install-recommends -y git python3-dev python3-pip
 RUN rm -rf /app/repositories/GPTQ-for-LLaMa && \
     git clone https://github.com/qwopqwop200/GPTQ-for-LLaMa -b cuda /app/repositories/GPTQ-for-LLaMa
 RUN pip3 uninstall -y quant-cuda && \
+    sed -i 's/^safetensors==0\.3\.0$/safetensors/g' /app/repositories/GPTQ-for-LLaMa/requirements.txt && \
     pip3 install -r /app/repositories/GPTQ-for-LLaMa/requirements.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
