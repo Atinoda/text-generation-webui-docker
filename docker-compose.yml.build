@@ -1,7 +1,11 @@
 version: "3"
 services:
   text-generation-webui-docker:
-    image: atinoda/text-generation-webui:default # Specify variant as the :tag
+    build:
+      context: .
+      target: default  # Specify the variant to build
+#      args:
+#        - LCL_SRC_DIR=text-generation-webui  # Developers - see Dockerfile app_base
     container_name: text-generation-webui
     environment:
       - EXTRA_LAUNCH_ARGS="--listen --verbose" # Custom launch args (e.g., --model MODEL_NAME)

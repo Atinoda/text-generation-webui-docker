@@ -15,7 +15,7 @@ This project dockerises the deployment of [oobabooga/text-generation-webui](http
 This is the recommended deployment method.
 
 ### Select variant
-Choose the desired variant by setting the build `target` in `docker-compose.yml` to one of the following options:
+Choose the desired variant by setting the image `:tag` in `docker-compose.yml` to one of the following options:
 
 | Variant | Description | 
 |---|---|
@@ -26,13 +26,6 @@ Choose the desired variant by setting the build `target` in `docker-compose.yml`
 | `llama-cublas` | CUDA GPU offloading enabled for llama-cpp. Use by setting option `n-gpu-layers` > 0. |
 
 *See: [oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md) and [obabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md) for more information on variants.*
-
-### Build
-Build the image:
-
-`docker compose build`
-
-*If you choose a different variant later, you must **rebuild** the image.*
 
 ### Deploy
 Deploy the service:
@@ -69,11 +62,22 @@ Extra launch arguments can be defined in the environment variable `EXTRA_LAUNCH_
 *Launch arguments should be defined as a space-separated list, just like writing them on the command line. These arguments are passed to the `server.py` module.*
 
 ### Updates
-These projects are moving quickly! To update to the latest version, rebuild the image without cache:
+These projects are moving quickly! To update to the most recent version on Docker hub, pull the latest image:
 
-`docker compose build --no-cache`
+`docker compose pull`
 
-*When the container is launched, it will print out how many commits behind origin the current build is, so you can decide if you want to update it.*
+Then recreate the container:
+
+`docker compose up`
+
+*When the container is launched, it will print out how many commits behind origin the current build is, so you can decide if you want to update it. Docker hub images will be periodically updated, but if you need bleeding edge versions you must build locally.*
+
+### Build (optional)
+The provided `docker-compose.yml.build` shows how to build the image locally. You can use it as a reference to modify the original `docker-compose.yml`, or you can rename it and use it as-is. Choose the desired variant to build by setting the build `target` and then run:
+
+`docker compose build`
+
+*If you choose a different variant later, you must **rebuild** the image.*
 
 ### Developers / Advanced Users
 The Dockerfile can be easily modified to compile and run the application from a local source folder. This is useful if you want to do some development or run a custom version. See the Dockerfile itself for instructions on how to do this.
@@ -83,15 +87,21 @@ The Dockerfile can be easily modified to compile and run the application from a 
 ## Standalone Container
 NOT recommended, instructions are included for completeness.
 
-### Build
-Build the image for the default target:
-
-`docker build --target default -t text-generation-webui:local .`
-
 ### Run
 Run a container (and destroy it upon completion):
 
-`docker run --it --rm -p 7860:7860 text-generation-webui:local`
+`docker run --it --rm --gpus all -p 7860:7860 atinoda/text-generation-webui:default`
+
+### Build and run (optional)
+Build the image for the default target and tag it as `local` :
+
+`docker build --target default -t text-generation-webui:local .`
+
+Run the local image (and destroy it upon completion):
+
+`docker run --it --rm --gpus all -p 7860:7860 text-generation-webui:local`
+
+
 
 # Contributions
 Contributions are welcomed - please feel free to submit a PR. More variants (e.g., AMD/ROC-M support) and Windows support can help lower the barrier to entry, make this technology accessible to as many people as possible, and push towards democratising the severe impacts that AI is having on our society.

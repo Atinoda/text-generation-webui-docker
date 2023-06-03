@@ -56,7 +56,11 @@ EXPOSE 7860
 EXPOSE 5000
 EXPOSE 5005
 # Required for Python print statements to appear in logs
-ENV PYTHONUNBUFFERED=1  
+ENV PYTHONUNBUFFERED=1
+# Force variant layers to sync cache by setting --build-arg BUILD_DATE
+ARG BUILD_DATE
+ENV BUILD_DATE=$BUILD_DATE
+RUN echo "$BUILD_DATE" > /build_date.txt
 # Run
 COPY ./scripts/docker-entrypoint.sh /scripts/docker-entrypoint.sh
 RUN chmod +x /scripts/docker-entrypoint.sh
@@ -81,6 +85,7 @@ RUN apt-get install --no-install-recommends -y git python3-dev build-essential p
 RUN rm -rf /app/repositories/GPTQ-for-LLaMa && \
     git clone https://github.com/qwopqwop200/GPTQ-for-LLaMa -b triton /app/repositories/GPTQ-for-LLaMa
 RUN pip3 uninstall -y quant-cuda && \
+    sed -i 's/^safetensors==0\.3\.0$/safetensors/g' /app/repositories/GPTQ-for-LLaMa/requirements.txt && \
     pip3 install -r /app/repositories/GPTQ-for-LLaMa/requirements.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
