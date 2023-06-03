@@ -46,8 +46,8 @@ Three commonly used ports are exposed:
 |  Port  | Description | Configuration |
 |  ----  | ----------- | ------------- |
 | `7860` | Web UI port | Pre-configured and enabled in `docker-compose.yml` |
-| `5000` | API port    | Enable by adding launch arg `--api` then uncomment mapping in `docker-compose.yml` |
-| `5005` | Streaming port | Enable by adding launch arg `--api` then uncomment mapping in `docker-compose.yml` |
+| `5000` | API port    | Enable by adding `--api --extensions api` to launch args then uncomment mapping in `docker-compose.yml` |
+| `5005` | Streaming port | Enable by adding `--api --extensions api` to launch args then uncomment mapping in `docker-compose.yml` |
 
 *Extensions may use additional ports - check the application documentation for more details.*
 
