@@ -1,5 +1,5 @@
 # Introduction
-This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., latest `llama-cpp-python` with GPU offloading, the more recent `triton` and `cuda` branches of GPTQ).
+This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., latest `llama-cpp-python` with GPU offloading, the more recent `triton` and `cuda` branches of GPTQ). The images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui)
 
 *This goal of this project is to be to [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), what [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) is to [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).*
 
@@ -20,10 +20,10 @@ Choose the desired variant by setting the image `:tag` in `docker-compose.yml` t
 | Variant | Description | 
 |---|---|
 | `default` | Implementation of the vanilla deployment from source. Also includes pre-installed `AutoGPTQ` library from `PanQiWei/AutoGPTQ`.  |
-| `triton` | Updated GPTQ using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. |
-| `cuda` | Updated GPTQ using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. |
-| `monkey-patch` | Use LoRAs in 4-Bit GPTQ mode. |
-| `llama-cublas` | CUDA GPU offloading enabled for llama-cpp. Use by setting option `n-gpu-layers` > 0. |
+| `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. |
+| `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. |
+| `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. |
+| `llama-cublas` | CUDA GPU offloading enabled for `llama-cpp`. Use by setting option `n-gpu-layers` > 0. |
 
 *See: [oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md) and [obabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md) for more information on variants.*
 
@@ -52,7 +52,7 @@ Three commonly used ports are exposed:
 *Extensions may use additional ports - check the application documentation for more details.*
 
 ### Volumes
-The provided example docker compose maps several volumes from the local `config` directory into the container: `loras, models, presets, prompts, softprompts, training`. If these folders are empty, they will be initialised when the container is run.
+The provided example docker compose maps several volumes from the local `config` directory into the container: `loras, models, presets, prompts, training`. If these folders are empty, they will be initialised when the container is run.
 
 *If you are getting an error about missing files, try clearing these folders and letting the service re-populate them.*
 

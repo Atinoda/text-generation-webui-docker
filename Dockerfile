@@ -33,10 +33,6 @@ RUN git clone https://github.com/oobabooga/GPTQ-for-LLaMa.git -b cuda /app/repos
 # Build and install default GPTQ ('quant_cuda')
 ARG TORCH_CUDA_ARCH_LIST="6.1;7.0;7.5;8.0;8.6+PTX"
 RUN cd /app/repositories/GPTQ-for-LLaMa/ && python3 setup_cuda.py install
-# Install auto-gptq
-RUN cd /app/repositories/ && git clone https://github.com/PanQiWei/AutoGPTQ.git && \
-    cd AutoGPTQ && pip3 install .
-
 
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS base
 # Runtime pre-reqs

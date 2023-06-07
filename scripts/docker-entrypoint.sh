@@ -10,7 +10,7 @@ function ctrl_c {
 trap ctrl_c SIGTERM SIGINT SIGQUIT SIGHUP
 
 # Generate default configs if empty
-CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "softprompts" "training/datasets" "training/formats")
+CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "training/datasets" "training/formats")
 for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
   if [ -z "$(ls /app/"$config_dir")" ]; then
     echo "*** Initialising config for: '$config_dir' ***"
@@ -37,6 +37,10 @@ else
 fi
 echo "=== (This version is $COMMITS_BEHIND commits behind origin) ===" 
 cd $cur_dir
+
+# Print build date
+BUILD_DATE=$(cat /build_date.txt)
+echo "=== Image build date: $BUILD_DATE ===" 
 
 # Assemble CMD and extra launch args
 eval "extra_launch_args=($EXTRA_LAUNCH_ARGS)"
