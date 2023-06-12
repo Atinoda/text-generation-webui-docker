@@ -57,9 +57,10 @@ ENV PYTHONUNBUFFERED=1
 ARG BUILD_DATE
 ENV BUILD_DATE=$BUILD_DATE
 RUN echo "$BUILD_DATE" > /build_date.txt
+# Copy and enable all scripts
+COPY ./scripts /scripts
+RUN chmod +x /scripts/*
 # Run
-COPY ./scripts/docker-entrypoint.sh /scripts/docker-entrypoint.sh
-RUN chmod +x /scripts/docker-entrypoint.sh
 ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
 
 

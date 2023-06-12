@@ -52,7 +52,9 @@ Three commonly used ports are exposed:
 *Extensions may use additional ports - check the application documentation for more details.*
 
 ### Volumes
-The provided example docker compose maps several volumes from the local `config` directory into the container: `loras, models, presets, prompts, training`. If these folders are empty, they will be initialised when the container is run.
+The provided example docker compose maps several volumes from the local `config` directory into the container: `loras, models, presets, prompts, training, extensions`. If these folders are empty, they will be initialised when the container is run.
+
+Extensions will persist their state between container launches if you use the mapped folder - **but they will not automatically update when a new image is released, so this feature is disabled by default.** You must uncomment the mapping in `docker-compose.yml` to enable this extension persistence.
 
 *If you are getting an error about missing files, try clearing these folders and letting the service re-populate them.*
 
@@ -60,6 +62,13 @@ The provided example docker compose maps several volumes from the local `config`
 Extra launch arguments can be defined in the environment variable `EXTRA_LAUNCH_ARGS` (e.g., `"--model MODEL_NAME"`, to load a model at launch). The provided default extra arguments are `--verbose` and `--listen` (which makes the webui available on your local  network) and these are set in the `docker-compose.yml`.
 
 *Launch arguments should be defined as a space-separated list, just like writing them on the command line. These arguments are passed to the `server.py` module.*
+
+### Runtime extension build
+Extra launch arguments can be defined in the environment variable `BUILD_EXTENSIONS_LIVE` (e.g., `"silero_tts whisper_stt"`, will rebuild those extensions at launch). This feature may be useful if you are developing a third-party extension and need its dependencies refresh at launch.
+
+**Startup times will be much slower** if you use this feature, because it will rebuild the named extensions every time the container is started (i.e., don't use this feature unless you are certain that you need it.)
+
+*Extension names for runtime build should be defined as a space-separated list.*
 
 ### Updates
 These projects are moving quickly! To update to the most recent version on Docker hub, pull the latest image:

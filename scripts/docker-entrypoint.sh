@@ -10,7 +10,7 @@ function ctrl_c {
 trap ctrl_c SIGTERM SIGINT SIGQUIT SIGHUP
 
 # Generate default configs if empty
-CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "training/datasets" "training/formats")
+CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "training/datasets" "training/formats" "extensions")
 for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
   if [ -z "$(ls /app/"$config_dir")" ]; then
     echo "*** Initialising config for: '$config_dir' ***"
@@ -18,6 +18,12 @@ for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
     chown -R 1000:1000 /app/"$config_dir"  # Not ideal... but convenient.
   fi
 done
+
+# Runtime extension build
+if [[ -n "$BUILD_EXTENSIONS_LIVE" ]]; then
+  eval "live_extensions=($BUILD_EXTENSIONS_LIVE)"
+  . /scripts/extensions_runtime_rebuild.sh $live_extensions
+fi
 
 # Print variant
 VARIANT=$(cat /variant.txt)
