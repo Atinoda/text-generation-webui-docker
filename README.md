@@ -86,6 +86,10 @@ The provided `docker-compose.yml.build` shows how to build the image locally. Yo
 
 `docker compose build`
 
+To do a clean build and ensure the latest version:
+
+`docker compose build --no-cache`
+
 *If you choose a different variant later, you must **rebuild** the image.*
 
 ### Developers / Advanced Users
@@ -109,8 +113,6 @@ Build the image for the default target and tag it as `local` :
 Run the local image (and destroy it upon completion):
 
 `docker run --it --rm --gpus all -p 7860:7860 text-generation-webui:local`
-
-
 
 # Contributions
 Contributions are welcomed - please feel free to submit a PR. More variants (e.g., AMD/ROC-M support) and Windows support can help lower the barrier to entry, make this technology accessible to as many people as possible, and push towards democratising the severe impacts that AI is having on our society.
