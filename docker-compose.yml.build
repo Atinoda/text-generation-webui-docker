@@ -22,7 +22,7 @@ services:
       - ./config/prompts:/app/prompts
       - ./config/softprompts:/app/softprompts
       - ./config/training:/app/training
-      - ./config/extensions:/app/extensions
+#      - ./config/extensions:/app/extensions
     logging:
       driver:  json-file
       options:
