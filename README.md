@@ -64,7 +64,7 @@ Extra launch arguments can be defined in the environment variable `EXTRA_LAUNCH_
 *Launch arguments should be defined as a space-separated list, just like writing them on the command line. These arguments are passed to the `server.py` module.*
 
 ### Runtime extension build
-Extra launch arguments can be defined in the environment variable `BUILD_EXTENSIONS_LIVE` (e.g., `"silero_tts whisper_stt"`, will rebuild those extensions at launch). This feature may be useful if you are developing a third-party extension and need its dependencies refresh at launch.
+Extensions which should be built during startup can be defined in the environment variable `BUILD_EXTENSIONS_LIVE` (e.g., `"silero_tts whisper_stt"`, will rebuild those extensions at launch). This feature may be useful if you are developing a third-party extension and need its dependencies to refresh at launch.
 
 **Startup times will be much slower** if you use this feature, because it will rebuild the named extensions every time the container is started (i.e., don't use this feature unless you are certain that you need it.)
 
