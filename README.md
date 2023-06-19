@@ -19,7 +19,7 @@ Choose the desired variant by setting the image `:tag` in `docker-compose.yml` t
 
 | Variant | Description | 
 |---|---|
-| `default` | Implementation of the vanilla deployment from source. Also includes pre-installed `AutoGPTQ` library from `PanQiWei/AutoGPTQ`.  |
+| `default` | Implementation of the vanilla deployment from source. Also includes pre-installed `ExLlAMA` library from `turboderp/exllama`.  |
 | `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. |
 | `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. |
 | `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. |
