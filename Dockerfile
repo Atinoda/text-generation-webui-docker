@@ -20,6 +20,7 @@ RUN git clone https://github.com/oobabooga/text-generation-webui /src
 #ARG LCL_SRC_DIR="text-generation-webui"
 #COPY ${LCL_SRC_DIR} /src
 #################################
+ENV LLAMA_CUBLAS=1
 # Copy source to app
 RUN cp -ar /src /app
 # Install oobabooga/text-generation-webui
@@ -94,8 +95,7 @@ FROM base AS llama-cublas
 RUN echo "LLAMA-CUBLAS" >> /variant.txt
 RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
 ENV LLAMA_CUBLAS=1
-RUN pip uninstall -y llama-cpp-python && \
-    CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
+RUN pip uninstall -y llama-cpp-python && pip install llama-cpp-python
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
