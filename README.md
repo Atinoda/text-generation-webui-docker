@@ -101,18 +101,18 @@ The Dockerfile can be easily modified to compile and run the application from a 
 NOT recommended, instructions are included for completeness.
 
 ### Run
-Run a container (and destroy it upon completion):
+Run a network accessible container (and destroy it upon completion):
 
-`docker run --it --rm --gpus all -p 7860:7860 atinoda/text-generation-webui:default`
+`docker run -it --rm -e EXTRA_LAUNCH_ARGS="--listen --verbose" --gpus all -p 7860:7860 atinoda/text-generation-webui:default`
 
 ### Build and run (optional)
 Build the image for the default target and tag it as `local` :
 
 `docker build --target default -t text-generation-webui:local .`
 
-Run the local image (and destroy it upon completion):
+Run the local image with local network access (and destroy it upon completion):
 
-`docker run --it --rm --gpus all -p 7860:7860 text-generation-webui:local`
+`docker run -it --rm -e EXTRA_LAUNCH_ARGS="--listen --verbose" --gpus all -p 7860:7860 text-generation-webui:local`
 
 # Contributions
 Contributions are welcomed - please feel free to submit a PR. More variants (e.g., AMD/ROC-M support) and Windows support can help lower the barrier to entry, make this technology accessible to as many people as possible, and push towards democratising the severe impacts that AI is having on our society.
