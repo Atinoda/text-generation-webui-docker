@@ -5,7 +5,7 @@ on:
     - cron: '22 12 * * *'
 
 jobs:
-  docker:
+  nightly-build-and-push:
     runs-on: ubuntu-latest
     steps:
       - 
