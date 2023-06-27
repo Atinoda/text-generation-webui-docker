@@ -20,7 +20,7 @@ Each variant has the 'extras' incuded in `default` but has some changes made as 
 | Variant | Description | 
 |---|---|
 | `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlAMA` library from `turboderp/exllama`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
-| `nightly` | Automated nightly build of the `default` variant. This image is built and pushed automatically - it is untested and may be unstable. *Suitable more frequent updates are required and instability is not an issue.*  |
+| `default-nightly` | Automated nightly build of the `default` variant. This image is built and pushed automatically - it is untested and may be unstable. *Suitable when more frequent updates are required and instability is not an issue.*  |
 | `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* |
 | `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* |
 | `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
