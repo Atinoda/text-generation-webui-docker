@@ -1,6 +1,6 @@
 name: Docker Nightly Build
 on:
-  push:
+#  push:
   schedule:
     - cron: '22 12 * * *'
 
