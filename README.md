@@ -20,7 +20,7 @@ Each variant has the 'extras' incuded in `default` but has some changes made as 
 | Variant | Description | 
 |---|---|
 | `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlAMA` library from `turboderp/exllama`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
-| `nightly` | Automated nightly build of the `default` variant. This image is built and pushed automatically - it is untested and may be unstable. *Suitable more frequent updates are required and instability is not an issue.*  |
+| `default-nightly` | Automated nightly build of the `default` variant. This image is built and pushed automatically - it is untested and may be unstable. *Suitable when more frequent updates are required and instability is not an issue.*  |
 | `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* |
 | `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* |
 | `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
@@ -80,7 +80,7 @@ Then recreate the container:
 
 `docker compose up`
 
-*When the container is launched, it will print out how many commits behind origin the current build is, so you can decide if you want to update it. Docker hub images will be periodically updated, but if you need bleeding edge versions you must build locally.*
+*When the container is launched, it will print out how many commits behind origin the current build is, so you can decide if you want to update it. Docker hub images will be periodically updated. The `default-nightly` image is built every day but it is not manually tested. If you need bleeding edge versions you must build locally.*
 
 ### Build (optional)
 The provided `docker-compose.yml.build` shows how to build the image locally. You can use it as a reference to modify the original `docker-compose.yml`, or you can rename it and use it as-is. Choose the desired variant to build by setting the build `target` and then run:

@@ -37,5 +37,5 @@ jobs:
         with:
           push: true
           target: default
-          build-args: BUILD_DATE=$BUILD_DATE
-          tags: atinoda/text-generation-webui:nightly
+          build-args: BUILD_DATE=${{ env.BUILD_DATE }}
+          tags: atinoda/text-generation-webui:default-nightly
