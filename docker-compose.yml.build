@@ -22,7 +22,8 @@ services:
       - ./config/prompts:/app/prompts
       - ./config/softprompts:/app/softprompts
       - ./config/training:/app/training
-#      - ./config/extensions:/app/extensions
+#      - ./config/extensions:/app/extensions  # Persist all extensions
+#      - ./config/extensions/silero_tts:/app/extensions/silero_tts  # Persist a single extension
     logging:
       driver:  json-file
       options:

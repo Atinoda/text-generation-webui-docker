@@ -10,13 +10,25 @@ function ctrl_c {
 trap ctrl_c SIGTERM SIGINT SIGQUIT SIGHUP
 
 # Generate default configs if empty
-CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "training/datasets" "training/formats" "extensions")
+CONFIG_DIRECTORIES=("loras" "models" "presets" "prompts" "training/datasets" "training/formats")
 for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
   if [ -z "$(ls /app/"$config_dir")" ]; then
     echo "*** Initialising config for: '$config_dir' ***"
     cp -ar /src/"$config_dir"/* /app/"$config_dir"/
     chown -R 1000:1000 /app/"$config_dir"  # Not ideal... but convenient.
   fi
+done
+
+# Populate extension folders if empty
+EXTENSIONS_SRC="/src/extensions"
+EXTENSIONS_DEFAULT=($(find "$EXTENSIONS_SRC" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;))
+for extension_dir in "${EXTENSIONS_DEFAULT[@]}"; do
+  if [ -z "$(ls /app/extensions/"$extension_dir" 2>/dev/null)" ]; then
+    echo "*** Initialising extension: '$extension_dir' ***"
+    mkdir -p /app/extensions/"$extension_dir"
+    cp -ar "$EXTENSIONS_SRC"/"$extension_dir"/* /app/extensions/"$extension_dir"/
+  fi
+  chown -R 1000:1000 /app/extensions/"$extension_dir"  # Not ideal... but convenient.
 done
 
 # Runtime extension build

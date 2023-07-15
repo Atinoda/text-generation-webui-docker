@@ -55,7 +55,7 @@ Three commonly used ports are exposed:
 ### Volumes
 The provided example docker compose maps several volumes from the local `config` directory into the container: `loras, models, presets, prompts, training, extensions`. If these folders are empty, they will be initialised when the container is run.
 
-Extensions will persist their state between container launches if you use the mapped folder - **but they will not automatically update when a new image is released, so this feature is disabled by default.** You must uncomment the mapping in `docker-compose.yml` to enable this extension persistence.
+Extensions will persist their state between container launches if you use a mapped folder - **but they will not automatically update when a new image is released, so this feature is disabled by default.** The whole extensions folder can be mapped (all extensions are persisted) or individual extensions can be mapped one at a time. Examples are given in the `docker-compose.yml`.
 
 *If you are getting an error about missing files, try clearing these folders and letting the service re-populate them.*
 
