@@ -90,7 +90,7 @@ CMD ["python3", "/app/server.py"]
 
 FROM base AS deepspeed
 RUN echo "DEEPSPEED" >> /variant.txt
-RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip libmpich-dev
+RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip libmpich-dev libaio-dev
 RUN pip install mpi4py deepspeed
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["deepspeed", "--num_gpus=1", "/app/server.py", "--deepspeed"]
