@@ -23,6 +23,7 @@ Each variant has the 'extras' incuded in `default` but has some changes made as 
 | `default-nightly` | Automated nightly build of the `default` variant. This image is built and pushed automatically - it is untested and may be unstable. *Suitable when more frequent updates are required and instability is not an issue.*  |
 | `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* |
 | `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* |
+| `llama-cpu` | GPU supported is REMOVED from `llama-cpp`. Suitable for systems without a CUDA-capable GPU. *This is only for when GPU acceleration is not available and is a slower way to run models!* |
 | `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
 | `llama-cublas` | CUDA GPU offloading enabled for `llama-cpp`. Use by setting option `n-gpu-layers` > 0. ***DEPRECATION WARNING:** This capability has been rolled into the default. The variant will be removed if the upstream dependency does not conflict with `default`.* |
 
