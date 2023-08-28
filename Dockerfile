@@ -97,14 +97,6 @@ RUN pip3 uninstall -y quant-cuda && \
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
-FROM base AS llama-cublas
-RUN echo "LLAMA-CUBLAS" >> /variant.txt
-RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
-ENV LLAMA_CUBLAS=1
-RUN pip uninstall -y llama-cpp-python && pip install llama-cpp-python
-ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
-
 FROM base AS monkey-patch
 RUN echo "4-BIT MONKEY-PATCH" >> /variant.txt
 RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
