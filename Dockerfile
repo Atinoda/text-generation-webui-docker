@@ -12,10 +12,17 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install --upgrade pip setuptools && \
     pip3 install torch torchvision torchaudio
 
-FROM env_base AS app_base 
+FROM env_base AS app_base
+# Copy and enable all scripts
+COPY ./scripts /scripts
+RUN chmod +x /scripts/*
 ### DEVELOPERS/ADVANCED USERS ###
 # Clone oobabooga/text-generation-webui
 RUN git clone https://github.com/oobabooga/text-generation-webui /src
+# Use script to check out specific version
+ARG VERSION_TAG
+ENV VERSION_TAG=${VERSION_TAG}
+RUN . /scripts/checkout_src_version.sh
 # To use local source: comment out the git clone command then set the build arg `LCL_SRC_DIR`
 #ARG LCL_SRC_DIR="text-generation-webui"
 #COPY ${LCL_SRC_DIR} /src
@@ -26,7 +33,6 @@ RUN cp -ar /src /app
 # Install oobabooga/text-generation-webui
 RUN --mount=type=cache,target=/root/.cache/pip pip3 install -r /app/requirements.txt
 # Install extensions
-COPY ./scripts/build_extensions.sh /scripts/build_extensions.sh
 RUN --mount=type=cache,target=/root/.cache/pip \
     chmod +x /scripts/build_extensions.sh && . /scripts/build_extensions.sh
 # Clone default GPTQ
@@ -58,6 +64,9 @@ ENV PYTHONUNBUFFERED=1
 ARG BUILD_DATE
 ENV BUILD_DATE=$BUILD_DATE
 RUN echo "$BUILD_DATE" > /build_date.txt
+ARG VERSION_TAG
+ENV VERSION_TAG=$VERSION_TAG
+RUN echo "$VERSION_TAG" > /version_tag.txt
 # Copy and enable all scripts
 COPY ./scripts /scripts
 RUN chmod +x /scripts/*

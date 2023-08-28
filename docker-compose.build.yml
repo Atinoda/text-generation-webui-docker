@@ -4,7 +4,9 @@ services:
     build:
       context: .
       target: default  # Specify the variant to build
-#      args:
+      args:
+        - VERSION_TAG="v1.5"  # Checkout this specific tag from upstream. Omit or set `nightly` for latest.
+#        - BUILD_DATE="1970-01-01"  # Set the build date as desired
 #        - LCL_SRC_DIR=text-generation-webui  # Developers - see Dockerfile app_base
     container_name: text-generation-webui
     environment:

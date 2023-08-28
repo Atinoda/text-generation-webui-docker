@@ -26,6 +26,7 @@ Each variant has the 'extras' incuded in `default` but has some changes made as 
 | `llama-cpu` | GPU supported is REMOVED from `llama-cpp`. Suitable for systems without a CUDA-capable GPU. *This is only for when GPU acceleration is not available and is a slower way to run models!* |
 | `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
 | `llama-cublas` | CUDA GPU offloading enabled for `llama-cpp`. Use by setting option `n-gpu-layers` > 0. ***DEPRECATION WARNING:** This capability has been rolled into the default. The variant will be removed if the upstream dependency does not conflict with `default`.* |
+| `{VARIANT}-version` | Build of each {VARIANT} tagged with the release version of the text-generation-webui (e.g., `default-v1.5`).  *Visit [obabooga/text-generation-webui/releases](https://github.com/oobabooga/text-generation-webui/releases) for details.* |
 
 *See: [oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md), [obabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md), and [oobabooga/text-generation-webui/blob/main/docs/ExLlama.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/ExLlama.md) for more information on variants.*
 

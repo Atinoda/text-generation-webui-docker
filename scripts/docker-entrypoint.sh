@@ -39,7 +39,8 @@ fi
 
 # Print variant
 VARIANT=$(cat /variant.txt)
-echo "=== Running text-generation-webui variant: '$VARIANT' ===" 
+VERSION_TAG_STR=$(cat /version_tag.txt)
+echo "=== Running text-generation-webui variant: '$VARIANT' $VERSION_TAG_STR ===" 
 
 # Print version freshness
 cur_dir=$(pwd)
@@ -51,9 +52,9 @@ if [ $? -ne 0 ]; then
   COMMITS_BEHIND="UNKNOWN"
 else
   # The command executed successfully
-  COMMITS_BEHIND=$(git rev-list HEAD..origin --count)
+  COMMITS_BEHIND=$(git rev-list HEAD..main --count)
 fi
-echo "=== (This version is $COMMITS_BEHIND commits behind origin) ===" 
+echo "=== (This version is $COMMITS_BEHIND commits behind origin main) ===" 
 cd $cur_dir
 
 # Print build date
