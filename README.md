@@ -20,12 +20,12 @@ Each variant has the 'extras' incuded in `default` but has some changes made as 
 | Variant | Description | 
 |---|---|
 | `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlAMA` library from `turboderp/exllama`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
-| `default-nightly` | Automated nightly build of the `default` variant. This image is built and pushed automatically - it is untested and may be unstable. *Suitable when more frequent updates are required and instability is not an issue.*  |
 | `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* |
 | `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* |
 | `llama-cpu` | GPU supported is REMOVED from `llama-cpp`. Suitable for systems without a CUDA-capable GPU. *This is only for when GPU acceleration is not available and is a slower way to run models!* |
 | `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
 | `{VARIANT}-version` | Build of each {VARIANT} tagged with the release version of the text-generation-webui (e.g., `default-v1.5`).  *Visit [obabooga/text-generation-webui/releases](https://github.com/oobabooga/text-generation-webui/releases) for details.* |
+| `{VARIANT}-nightly` | Automated nightly build of the {VARIANT}. These images are built and pushed automatically - they are untested and may be unstable. *Suitable when more frequent updates are required and instability is not an issue.* |
 
 *See: [oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/GPTQ-models-(4-bit-mode).md), [obabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/llama.cpp-models.md), and [oobabooga/text-generation-webui/blob/main/docs/ExLlama.md](https://github.com/oobabooga/text-generation-webui/blob/main/docs/ExLlama.md) for more information on variants.*
 
