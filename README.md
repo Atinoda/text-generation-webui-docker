@@ -19,7 +19,7 @@ Each variant has the 'extras' incuded in `default` but has some changes made as 
 
 | Variant | Description | 
 |---|---|
-| `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlAMA` library from `turboderp/exllama`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
+| `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlAMAV2` library from `turboderp/exllamav2`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
 | `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* |
 | `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* |
 | `llama-cpu` | GPU supported is REMOVED from `llama-cpp`. Suitable for systems without a CUDA-capable GPU. *This is only for when GPU acceleration is not available and is a slower way to run models!* |
