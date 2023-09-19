@@ -1,7 +1,7 @@
 # Introduction
 This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., latest `llama-cpp-python` with GPU offloading, the more recent `triton` and `cuda` branches of GPTQ). The images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui)
 
-*This goal of this project is to be to [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), what [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) is to [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).*
+*The goal of this project is to be to [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), what [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) is to [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).*
 
 # Usage
 *This project currently supports Linux as the deployment platform. It will also probably work using WSL2.*
@@ -15,7 +15,7 @@ This project dockerises the deployment of [oobabooga/text-generation-webui](http
 This is the recommended deployment method (it is the easiest and quickest way to manage folders and settings through updates and reinstalls). The recommend variant is `default` (it is an enhanced version of the vanilla application).
 
 ### Select variant
-Each variant has the 'extras' incuded in `default` but has some changes made as described in the table. Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pseudo-versions will be selected periodically from the main branch and uploaded with a date tag to establish more frequent stable milestones. Pulling an untagged variant will pull either the latest release version or latest pseudo-version, whichever is most recent. Bleeding-edge is available via nightly builds of each variant. Choose the desired variant by setting the image `:tag` in `docker-compose.yml` to one of the following options:
+Each variant has the 'extras' included in `default` but has some changes made as described in the table. Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pseudo-versions will be selected periodically from the main branch and uploaded with a date tag to establish more frequent stable milestones. Pulling an untagged variant will pull either the latest release version or latest pseudo-version, whichever is most recent. Bleeding-edge is available via nightly builds of each variant. Choose the desired variant by setting the image `:tag` in `docker-compose.yml` to one of the following options:
 
 | Variant | Description | 
 |---|---|
