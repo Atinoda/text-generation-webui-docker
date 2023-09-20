@@ -1,5 +1,5 @@
 # Introduction
-This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., latest `llama-cpp-python` with GPU offloading, the more recent `triton` and `cuda` branches of GPTQ). The images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui)
+This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., `llama-cpp` for CPU-only inferencing, the `triton` and `cuda` branches of GPTQ). The images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui)
 
 *The goal of this project is to be to [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), what [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) is to [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).*
 
@@ -19,7 +19,7 @@ Each variant has the 'extras' included in `default` but has some changes made as
 
 | Variant | Description | 
 |---|---|
-| `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlAMAV2` library from `turboderp/exllamav2`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
+| `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlamaV2` library from `turboderp/exllamav2`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
 | `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* |
 | `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* |
 | `llama-cpu` | GPU supported is REMOVED from `llama-cpp`. Suitable for systems without a CUDA-capable GPU. *This is only for when GPU acceleration is not available and is a slower way to run models!* |
