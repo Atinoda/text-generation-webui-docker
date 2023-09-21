@@ -42,6 +42,8 @@ ARG TORCH_CUDA_ARCH_LIST="6.1;7.0;7.5;8.0;8.6+PTX"
 RUN cd /app/repositories/GPTQ-for-LLaMa/ && python3 setup_cuda.py install
 # Install exllamav2 and flash attention
 RUN pip install -U ninja exllamav2 && pip install flash-attn --no-build-isolation
+# TEMPORARY HOTFIX FOR EXLLAMAV2:
+RUN . /scripts/exllama_version_fix.sh
 
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS base
 # Runtime pre-reqs
