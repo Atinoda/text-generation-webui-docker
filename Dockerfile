@@ -40,10 +40,8 @@ RUN git clone https://github.com/oobabooga/GPTQ-for-LLaMa.git -b cuda /app/repos
 # Build and install default GPTQ ('quant_cuda')
 ARG TORCH_CUDA_ARCH_LIST="6.1;7.0;7.5;8.0;8.6+PTX"
 RUN cd /app/repositories/GPTQ-for-LLaMa/ && python3 setup_cuda.py install
-# Install exllamav2 and flash attention
-RUN pip install -U ninja exllamav2 && pip install flash-attn --no-build-isolation
-# TEMPORARY HOTFIX FOR EXLLAMAV2:
-RUN . /scripts/exllama_version_fix.sh
+# Install flash attention for exllamav2
+RUN pip install flash-attn --no-build-isolation
 
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS base
 # Runtime pre-reqs
