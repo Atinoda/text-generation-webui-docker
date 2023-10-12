@@ -10,7 +10,7 @@ ENV VIRTUAL_ENV=/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install --upgrade pip setuptools && \
-    pip3 install torch torchvision torchaudio
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 FROM env_base AS app_base
 # Copy and enable all scripts
