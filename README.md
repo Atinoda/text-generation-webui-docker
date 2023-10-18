@@ -1,29 +1,39 @@
 # Introduction
-This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., `llama-cpp` for CPU-only inferencing, the `triton` and `cuda` branches of GPTQ). The images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui)
+This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration (corresponding to a vanilla deployment of the application) as well as pre-configured support for other set-ups (e.g., `llama-cpu` for CPU-only inferencing). Pre-built images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for convenience.
 
 *The goal of this project is to be to [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), what [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) is to [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).*
 
+# Quick-Start
+- Pull the repo: `git clone https://github.com/Atinoda/text-generation-webui-docker`
+- Point your terminal to the downloaded folder (e.g., `cd text-generation-webui-docker`)
+- *(Optional) Edit `docker-compose.yml` to your requirements*
+- Start the server (the image will be pulled automatically for the first run): `docker compose up`
+- Navigate to `127.0.0.1:7860` and enjoy your local instance of oobabooga's text-generation-webui!
+
 # Usage
-*This project currently supports Linux as the deployment platform. It will also probably work using WSL2.*
+This repo provides a template `docker-compose.yml` and a structured `config` folder to store the application files. The project officially targets Linux as the deployment platform, however the images are reported to work on Docker Desktop for Windows, and this should continue to be the case. There may be some additional steps required for networking and file management when using WSL2. Some Mac users have been able to run the images, although the Dockerfile may require modifications for Apple Silicon compatibility.
+
+*Check the issues for hints and tips for your platform (and remember to search closed issues too!)*
 
 ## Pre-Requisites
 - docker
 - docker compose
-- CUDA docker runtime
+- CUDA docker runtime *(optional, for GPU-powered inferencing)*
+
+*Ask your favourite LLM how to install and configure `docker`, `docker-compose`, and the Nvidia CUDA docker runtime for your platform!*
 
 ## Docker Compose
 This is the recommended deployment method (it is the easiest and quickest way to manage folders and settings through updates and reinstalls). The recommend variant is `default` (it is an enhanced version of the vanilla application).
 
 ### Select variant
-Each variant has the 'extras' included in `default` but has some changes made as described in the table. Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pseudo-versions will be selected periodically from the main branch and uploaded with a date tag to establish more frequent stable milestones. Pulling an untagged variant will pull either the latest release version or latest pseudo-version, whichever is most recent. Bleeding-edge is available via nightly builds of each variant. Choose the desired variant by setting the image `:tag` in `docker-compose.yml` to one of the following options:
+Each variant has the 'extras' included in `default` but has some changes made as described in the table. Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pseudo-versions may be selected periodically from the main branch and uploaded with a date tag to establish more frequent stable milestones, *but this should be rare because the upstream project has implemented weekly rolling releaese snapshots.* Pulling an untagged variant will pull either the latest release version or latest pseudo-version, whichever is most recent. Bleeding-edge is available via nightly builds of each variant. Choose the desired variant by setting the image `:tag` in `docker-compose.yml` to one of the following options:
 
 | Variant | Description | 
 |---|---|
-| `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlamaV2` library from `turboderp/exllamav2`, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
-| `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* |
-| `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* |
+| `default` | Implementation of the vanilla deployment from source. Plus pre-installed `ExLlamaV2` library from `turboderp/exllamav2` with `flash-attn` enabled, and CUDA GPU offloading enabled for `llama-cpp`. *This version is recommended for most users.*  |
+| `triton` | Updated `GPTQ-for-llama` using the latest `triton` branch from `qwopqwop200/GPTQ-for-LLaMa`. Suitable for Linux only. *This version is accurate but a little slow.* ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
+| `cuda` | Updated `GPTQ-for-llama` using the latest `cuda` branch from `qwopqwop200/GPTQ-for-LLaMa`. *This version is very slow!* ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
 | `llama-cpu` | GPU supported is REMOVED from `llama-cpp`. Suitable for systems without a CUDA-capable GPU. *This is only for when GPU acceleration is not available and is a slower way to run models!* |
-| `monkey-patch` | Use LoRAs in 4-Bit `GPTQ-for-llama` mode. ***DEPRECATION WARNING:** This version is outdated, but will remain for now.* |
 | `{VARIANT}-{VERSION}` | Build of each {VARIANT} tagged with the release {VERSION} of the text-generation-webui (e.g., `default-v1.5`). *Visit [obabooga/text-generation-webui/releases](https://github.com/oobabooga/text-generation-webui/releases) for release notes.*  Dated milestone pseudo-version tags are also available (e.g., `default-2023.09.02`). *Visit [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) to see the available milestones.*|
 | `{VARIANT}-nightly` | Automated nightly build of the {VARIANT}. These images are built and pushed automatically - they are untested and may be unstable. *Suitable when more frequent updates are required and instability is not an issue.* |
 
@@ -64,6 +74,8 @@ Extensions will persist their state between container launches if you use a mapp
 Extra launch arguments can be defined in the environment variable `EXTRA_LAUNCH_ARGS` (e.g., `"--model MODEL_NAME"`, to load a model at launch). The provided default extra arguments are `--verbose` and `--listen` (which makes the webui available on your local  network) and these are set in the `docker-compose.yml`.
 
 *Launch arguments should be defined as a space-separated list, just like writing them on the command line. These arguments are passed to the `server.py` module.*
+
+**Kubernetes users:** Please see [EXTRA_LAUNCH_ARGS are not honored #25](https://github.com/Atinoda/text-generation-webui-docker/issues/25) for fixing deployments. *Thanks to @jrsperry for reporting, and @accountForIssues for sharing a workaround (TLDR: Escape space characters `\ ` instead of ` `.)*
 
 ### Runtime extension build
 Extensions which should be built during startup can be defined in the environment variable `BUILD_EXTENSIONS_LIVE` (e.g., `"silero_tts whisper_stt"`, will rebuild those extensions at launch). This feature may be useful if you are developing a third-party extension and need its dependencies to refresh at launch.
