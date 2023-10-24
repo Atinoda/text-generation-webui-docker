@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS env_base
+FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 AS env_base
 # Pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git vim build-essential python3-dev python3-venv python3-pip
@@ -10,7 +10,7 @@ ENV VIRTUAL_ENV=/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install --upgrade pip setuptools && \
-    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+    pip3 install torch torchvision torchaudio
 
 FROM env_base AS app_base
 # Copy and enable all scripts
@@ -43,7 +43,7 @@ RUN cd /app/repositories/GPTQ-for-LLaMa/ && python3 setup_cuda.py install
 # Install flash attention for exllamav2
 RUN pip install flash-attn --no-build-isolation
 
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 AS base
+FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 AS base
 # Runtime pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-venv python3-dev git
