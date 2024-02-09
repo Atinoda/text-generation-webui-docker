@@ -1,16 +1,15 @@
 version: "3"
 services:
   text-generation-webui-docker:
-    image: atinoda/text-generation-webui:default # Specify variant as the :tag
+    image: atinoda/text-generation-webui:default-nvidia # Specify variant as the :tag
     container_name: text-generation-webui
     environment:
       - EXTRA_LAUNCH_ARGS="--listen --verbose" # Custom launch args (e.g., --model MODEL_NAME)
-#      - BUILD_EXTENSIONS_LIVE="silero_tts whisper_stt" # Install named extensions during every container launch. THIS WILL SIGNIFICANLTLY SLOW LAUNCH TIME.
+#      - BUILD_EXTENSIONS_LIVE="coqui_tts whisper_stt" # Install named extensions during every container launch. THIS WILL SIGNIFICANLTLY SLOW LAUNCH TIME AND IS NORMALLY NOT REQUIRED.
     ports:
       - 7860:7860  # Default web port
 #      - 5000:5000  # Default API port
 #      - 5005:5005  # Default streaming port
-#      - 5001:5001  # Default OpenAI API extension port
     volumes:
       - ./config/characters:/app/characters
       - ./config/loras:/app/loras
@@ -19,12 +18,13 @@ services:
       - ./config/prompts:/app/prompts
       - ./config/training:/app/training
 #      - ./config/extensions:/app/extensions  # Persist all extensions
-#      - ./config/extensions/silero_tts:/app/extensions/silero_tts  # Persist a single extension
+#      - ./config/extensions/coqui_tts:/app/extensions/coqui_tts  # Persist a single extension
     logging:
       driver:  json-file
       options:
         max-file: "3"   # number of files or file count
         max-size: '10m'
+    # Grant access to Nvidia GPU (comment out deploy: and below if not using Nvidia variant)
     deploy:
         resources:
           reservations:
