@@ -28,8 +28,8 @@ for extension_dir in "${EXTENSIONS_DEFAULT[@]}"; do
     mkdir -p /app/extensions/"$extension_dir"
     cp -ar "$EXTENSIONS_SRC"/"$extension_dir"/* /app/extensions/"$extension_dir"/
   fi
-  chown -R 1000:1000 /app/extensions/"$extension_dir"  # Not ideal... but convenient.
 done
+chown -R 1000:1000 /app/extensions  # Not ideal... but convenient.
 
 # Runtime extension build
 if [[ -n "$BUILD_EXTENSIONS_LIVE" ]]; then

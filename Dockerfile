@@ -1,4 +1,9 @@
-FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 AS env_base
+####################
+### BUILD IMAGES ###
+####################
+
+# COMMON
+FROM ubuntu:22.04 AS app_base
 # Pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git vim build-essential python3-dev python3-venv python3-pip
@@ -9,10 +14,7 @@ RUN virtualenv /venv
 ENV VIRTUAL_ENV=/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN pip3 install --upgrade pip setuptools && \
-    pip3 install torch torchvision torchaudio
-
-FROM env_base AS app_base
+RUN pip3 install --upgrade pip setuptools
 # Copy and enable all scripts
 COPY ./scripts /scripts
 RUN chmod +x /scripts/*
@@ -27,33 +29,95 @@ RUN . /scripts/checkout_src_version.sh
 #ARG LCL_SRC_DIR="text-generation-webui"
 #COPY ${LCL_SRC_DIR} /src
 #################################
-ENV LLAMA_CUBLAS=1
 # Copy source to app
 RUN cp -ar /src /app
-# Install oobabooga/text-generation-webui
-RUN --mount=type=cache,target=/root/.cache/pip pip3 install -r /app/requirements.txt
-# Install extensions
-RUN --mount=type=cache,target=/root/.cache/pip \
-    chmod +x /scripts/build_extensions.sh && . /scripts/build_extensions.sh
-# Clone default GPTQ
-RUN git clone https://github.com/oobabooga/GPTQ-for-LLaMa.git -b cuda /app/repositories/GPTQ-for-LLaMa
-# Build and install default GPTQ ('quant_cuda')
-ARG TORCH_CUDA_ARCH_LIST="6.1;7.0;7.5;8.0;8.6+PTX"
-RUN cd /app/repositories/GPTQ-for-LLaMa/ && python3 setup_cuda.py install
-# Install flash attention for exllamav2
-RUN pip install flash-attn --no-build-isolation
 
-FROM nvidia/cuda:12.1.0-devel-ubuntu22.04 AS base
+
+# NVIDIA-CUDA [Daily driver. Well done - you are the incumbent, Nvidia! Don't exploit your position.]
+# Base
+FROM app_base AS app_nvidia
+# Install pytorch for CUDA 12.1
+RUN pip3 install torch==2.1.* torchvision==0.16.* torchaudio==2.1.* \
+    --index-url https://download.pytorch.org/whl/cu121 
+# Install oobabooga/text-generation-webui
+RUN pip3 install -r /app/requirements.txt
+
+# Extended
+FROM app_nvidia AS app_nvidia_x
+# Install extensions
+RUN chmod +x /scripts/build_extensions.sh && \
+    . /scripts/build_extensions.sh
+
+
+# ROCM [Untested. Widen your hardware support, AMD!]
+# Base
+FROM app_base AS app_rocm
+# Install pytorch for ROCM
+RUN pip3 install torch==2.1.* torchvision==0.16.* torchaudio==2.1.* \
+    --index-url https://download.pytorch.org/whl/rocm5.6
+# Install oobabooga/text-generation-webui
+RUN pip3 install -r /app/requirements_amd.txt
+
+# Extended
+FROM app_rocm AS app_rocm_x
+RUN chmod +x /scripts/build_extensions.sh && \
+    . /scripts/build_extensions.sh
+
+
+# ARC [Untested, no hardware. Give AMD and Nvidia an incentive to compete, Intel!]
+# Base
+FROM app_base AS app_arc
+# Install oneAPI dependencies
+RUN pip3 install dpcpp-cpp-rt==2024.0 mkl-dpcpp==2024.0
+# Install libuv required by Intel-patched torch
+# !!! Fails to build (stale repo) !!!
+# RUN pip3 install pyuv
+# Install pytorch for ARC
+RUN pip3 install install torch==2.1.0a0 torchvision==0.16.0a0 torchaudio==2.1.0a0 \
+    intel-extension-for-pytorch==2.1.10 \
+    --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/
+# Install oobabooga/text-generation-webui
+RUN pip3 install -r /app/requirements_cpu_only.txt
+
+# Extended
+FROM app_arc AS app_arc_x
+RUN chmod +x /scripts/build_extensions.sh && \
+    . /scripts/build_extensions.sh
+
+
+# CPU [Everyone can join in, as long as they have the patience.]
+# Base
+FROM app_base AS app_cpu
+# Install pytorch for CPU
+RUN pip3 install torch==2.1.* torchvision==0.16.* torchaudio==2.1.* \
+    --index-url https://download.pytorch.org/whl/cpu
+# Install oobabooga/text-generation-webui
+RUN pip3 install -r /app/requirements_cpu_only.txt
+
+# Extended
+FROM app_cpu AS app_cpu_x
+# Install extensions
+RUN chmod +x /scripts/build_extensions.sh && \
+    . /scripts/build_extensions.sh
+
+
+# APPLE [Not possible. Open up your graphics acceleration API, Apple!]
+
+
+######################
+### RUNTIME IMAGES ###
+######################
+
+# COMMON
+FROM ubuntu:22.04 AS run_base
 # Runtime pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-venv python3-dev git
 # Copy app and src
 COPY --from=app_base /app /app
 COPY --from=app_base /src /src
-# Copy and activate venv
-COPY --from=app_base /venv /venv
+# Instantiate venv and pre-activate
 ENV VIRTUAL_ENV=/venv
-RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # Finalise app setup
 WORKDIR /app
@@ -76,48 +140,81 @@ RUN chmod +x /scripts/*
 ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
 
 
-# VARIANT BUILDS
-FROM base AS cuda
-RUN echo "CUDA" >> /variant.txt
-RUN apt-get install --no-install-recommends -y git python3-dev python3-pip
-RUN rm -rf /app/repositories/GPTQ-for-LLaMa && \
-    git clone https://github.com/qwopqwop200/GPTQ-for-LLaMa -b cuda /app/repositories/GPTQ-for-LLaMa
-RUN pip3 uninstall -y quant-cuda && \
-    sed -i 's/^safetensors==0\.3\.0$/safetensors/g' /app/repositories/GPTQ-for-LLaMa/requirements.txt && \
-    pip3 install -r /app/repositories/GPTQ-for-LLaMa/requirements.txt
+# NVIDIA-CUDA
+# Base
+FROM run_base AS base-nvidia
+# Copy venv
+COPY --from=app_nvidia $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "Nvidia Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
-FROM base AS triton
-RUN echo "TRITON" >> /variant.txt
-RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
-RUN rm -rf /app/repositories/GPTQ-for-LLaMa && \
-    git clone https://github.com/qwopqwop200/GPTQ-for-LLaMa -b triton /app/repositories/GPTQ-for-LLaMa
-RUN pip3 uninstall -y quant-cuda && \
-    sed -i 's/^safetensors==0\.3\.0$/safetensors/g' /app/repositories/GPTQ-for-LLaMa/requirements.txt && \
-    pip3 install -r /app/repositories/GPTQ-for-LLaMa/requirements.txt
+# Extended
+FROM run_base AS default-nvidia
+# Copy venv
+COPY --from=app_nvidia_x $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "Nvidia Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
-FROM base AS monkey-patch
-RUN echo "4-BIT MONKEY-PATCH" >> /variant.txt
-RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
-RUN git clone https://github.com/johnsmith0031/alpaca_lora_4bit /app/repositories/alpaca_lora_4bit && \
-    cd /app/repositories/alpaca_lora_4bit && git checkout 2f704b93c961bf202937b10aac9322b092afdce0
-ARG TORCH_CUDA_ARCH_LIST="8.6"
-RUN pip install git+https://github.com/sterlind/GPTQ-for-LLaMa.git@lora_4bit
-ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py", "--monkey-patch"]
 
-FROM base AS llama-cpu
-RUN echo "LLAMA-CPU" >> /variant.txt
-RUN apt-get install --no-install-recommends -y git python3-dev build-essential python3-pip
-RUN unset TORCH_CUDA_ARCH_LIST LLAMA_CUBLAS
-RUN pip uninstall -y llama_cpp_python_cuda llama-cpp-python && pip install llama-cpp-python --force-reinstall --upgrade
+# ROCM
+# Base
+FROM run_base AS base-rocm-unstable
+# Copy venv
+COPY --from=app_rocm $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "ROCM Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py", "--cpu"]
+CMD ["python3", "/app/server.py"]
 
-FROM base AS default
-RUN echo "DEFAULT" >> /variant.txt
+# Extended
+FROM run_base AS default-rocm-unstable
+# Copy venv
+COPY --from=app_rocm_x $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "ROCM Extended" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py"]
+
+
+# ARC
+# Base
+FROM run_base AS base-arc-unstable
+# Copy venv
+COPY --from=app_arc $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "ARC Base" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py"]
+
+# Extended
+FROM run_base AS default-arc-unstable
+# Copy venv
+COPY --from=app_arc_x $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "ARC Extended" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py"]
+
+
+# CPU
+# Base
+FROM run_base AS base-cpu
+# Copy venv
+COPY --from=app_cpu $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "CPU Base" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py"]
+
+# Extended
+FROM run_base AS default-cpu
+# Copy venv
+COPY --from=app_cpu_x $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "CPU Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
