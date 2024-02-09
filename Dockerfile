@@ -162,7 +162,7 @@ CMD ["python3", "/app/server.py"]
 
 # ROCM
 # Base
-FROM run_base AS base-rocm-unstable
+FROM run_base AS base-rocm
 # Copy venv
 COPY --from=app_rocm $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
@@ -171,7 +171,7 @@ ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
 # Extended
-FROM run_base AS default-rocm-unstable
+FROM run_base AS default-rocm
 # Copy venv
 COPY --from=app_rocm_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
@@ -182,7 +182,7 @@ CMD ["python3", "/app/server.py"]
 
 # ARC
 # Base
-FROM run_base AS base-arc-unstable
+FROM run_base AS base-arc
 # Copy venv
 COPY --from=app_arc $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
@@ -191,7 +191,7 @@ ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
 # Extended
-FROM run_base AS default-arc-unstable
+FROM run_base AS default-arc
 # Copy venv
 COPY --from=app_arc_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
