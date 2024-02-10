@@ -1,4 +1,4 @@
-name: Build default-nightly
+name: Build arc-nightly
 on:
   push:
 #  schedule:
@@ -40,6 +40,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          target: default-nvidia
+          target: default-arc
           build-args: BUILD_DATE=${{ env.BUILD_DATE }},VERSION_TAG=${{ env.VERSION_TAG }}
-          tags: atinoda/text-generation-webui:default-nightly,atinoda/text-generation-webui:default-nvidia-nightly
+          tags: atinoda/text-generation-webui:default-arc-nightly
