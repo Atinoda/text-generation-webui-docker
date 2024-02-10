@@ -1,8 +1,8 @@
 name: Build arc-nightly
 on:
-  push:
-#  schedule:
-#    - cron: '22 12 * * *'
+#  push:
+  schedule:
+    - cron: '22 12 * * *'
 
 jobs:
   nightly-build-and-push-default:
