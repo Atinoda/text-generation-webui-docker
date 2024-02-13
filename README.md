@@ -1,5 +1,5 @@
 # Introduction
-This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration corresponding to a standard deployment of the application with all extensions enabled, and a base version without extensions. Versions are offered for Nvidia GPU `nvidia`, AMD GPU (unstable) `rocm`, Intel Arc (unstable) `arc`, and CPU-only `cpu`. Pre-built images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for convenience.
+This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration corresponding to a standard deployment of the application with all extensions enabled, and a base version without extensions. Versions are offered for Nvidia GPU `nvidia`, AMD GPU (unstable) `rocm`, Intel Arc (unstable) `arc`, and CPU-only `cpu`. Pre-built images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui).
 
 *The goal of this project is to be to [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), what [AbdBarho/stable-diffusion-webui-docker](https://github.com/AbdBarho/stable-diffusion-webui-docker) is to [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).*
 
@@ -23,17 +23,30 @@ This repo provides a template `docker-compose.yml` and a structured `config` fol
 *Ask your favourite LLM how to install and configure `docker`, `docker-compose`, and the Nvidia CUDA docker runtime for your platform!*
 
 ## Docker Compose
-This is the recommended deployment method (it is the easiest and quickest way to manage folders and settings through updates and reinstalls). The recommend variant is `default-nvidia` (it is the fll version of the vanilla application with all default extensions installed).
+This is the recommended deployment method (it is the easiest and quickest way to manage folders and settings through updates and reinstalls). The recommended variant is `default` (it is the full version of the standard application with all default bundled extensions installed, set up for Nvidia GPU accelerated inference).
 
 ### Select variant
-Each variant has the 'extras' included in `default` but has some changes made as described in the table. Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pulling an untagged variant will pull either the latest stable release. Bleeding-edge is available via nightly builds of each variant. Choose the desired variant by setting the image `:tag` in `docker-compose.yml` using the pattern `{VARIANT}-{PLATFORM}-{VERSION}`, as follows:
+Each variant has the 'extras' included in `default` but has some changes made as described in the table. Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pulling an untagged variant will pull the latest stable release. Unstable, latest versions are available via nightly builds.
+
+Choose the desired variant by setting the image `:tag` in `docker-compose.yml` using the pattern `{VARIANT}-{PLATFORM}`, or `{VARIANT}-{PLATFORM}-{VERSION}` to specify a specific release.
 
 | Variant | Description | 
 |---|---|
-| `default` | Standard deployment with all extensions, configured for Nvidia GPU accelerated inferencing. *This version is recommended for most users.*  |
-| `default-{PLATFORM}` | Standard deployment with all extensions, configured for each supported platform: `nvidia`, `rocm`, `arc`, or `cpu`. *e.g., `default-cpu`*  |
-| `base-{PLATFORM}` | Basic deployment with no extensions included, configured for each supported platform: `nvidia`, `rocm`, `arc`, or `cpu`. *e.g., `base-rocm`*  |
-| `{VARIANT}-{PLATFORM}-{VERSION}` | Build of each `{VARIANT}-{PLATFORM}` tagged with the release `{VERSION}` of the text-generation-webui (e.g., `default-nvidia-snapshot-2024-02-04`). *Visit [obabooga/text-generation-webui/releases](https://github.com/oobabooga/text-generation-webui/releases) for release notes. Go to [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) to see the available milestones.*|
+| `default-*` | Standard deployment with all default bundled extensions installed. Normal image intended for everyday usage. |
+| `base-*` | Basic deployment with no extensions installed. Slimmer image intended for customisation or lightweight deployment.  |
+
+| Platform | Description | 
+|---|---|
+| `*-nvidia` | CUDA 12.1 inference acceleration. |
+| `*-cpu` | CPU-only inference. *Has become surprisingly fast since the early days!* |
+| `*-rocm` | ROCM 5.6 inference acceleration. *Experimental and unstable.* |
+| `*-arc` | Intel Arc XPU and oneAPI inference acceleration.  **Not compatible with Intel integrated GPU (iGPU).** *Experimental and unstable.* |
+
+| Examples | Description |
+|---|---|
+| `default` | Standard deployment with all extensions, configured for Nvidia GPU accelerated inferencing. Same as `default-nvidia`. *This version is recommended for most users.*  |
+| `default-cpu` | Standard deployment with all extensions, set up for CPU-only inference. *This version is useful if you don't have a supported GPU.*  |
+| `{VARIANT}-{PLATFORM}-{VERSION}` | Build of each `{VARIANT}-{PLATFORM}` tagged with the release `{VERSION}` of the text-generation-webui (e.g., `default-nvidia-snapshot-2024-02-04`). *Visit [obabooga/text-generation-webui/releases](https://github.com/oobabooga/text-generation-webui/releases) for release notes. Go to [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) to see the available pre-built versions.*|
 | `{VARIANT}-{PLATFORM}-nightly` | Automated nightly build of the variant. These images are built and pushed automatically - they are untested and may be unstable. *Suitable when more frequent updates are required and instability is not an issue.* |
 
 ### Deploy
@@ -131,13 +144,13 @@ The `rocm` variant is blind built and cannot be tested due to a lack of hardware
 The `arc` variant is blind built and cannot be tested due to a lack of hardware. User reports and insights are welcomed.
 
 ## Extensions
-The following are known issues with the following extensions and they are planned to be fixed. Testing and insights are welcomed!
-- multimodal: Crashes because model is not loaded at start
-- ngrok: Requires an account, causes a crash
-- silero_tts: Does not work due to pydantic dependency problem
-- superbooga/superboogav2: Crashes on startup
+The following are known issues and they are planned to be investigated. Testing and insights are welcomed!
+- `multimodal`: Crashes because model is not loaded at start
+- `ngrok`: Requires an account, causes a crash
+- `silero_tts`: Does not work due to pydantic dependency problem
+- `superbooga`/`superboogav2`: Crashes on startup
 
-## KUBERNETES
+## Kubernetes
 Please see [EXTRA_LAUNCH_ARGS are not honored #25](https://github.com/Atinoda/text-generation-webui-docker/issues/25) for fixing deployments. *Thanks to @jrsperry for reporting, and @accountForIssues for sharing a workaround (TLDR: Escape space characters with `\ `, instead of writing as ` ` .)*
 
 # Contributions
