@@ -1,0 +1,27 @@
+diff --git a/modules/ui_session.py b/modules/ui_session.py
+index 989046ea..b7003a30 100644
+--- a/modules/ui_session.py
++++ b/modules/ui_session.py
+@@ -41,7 +41,7 @@ def create_ui():
+         shared.gradio['save_settings'].click(
+             ui.gather_interface_values, gradio(shared.input_elements), gradio('interface_state')).then(
+             ui.save_settings, gradio('interface_state', 'preset_menu', 'extensions_menu', 'show_controls', 'theme_state'), gradio('save_contents')).then(
+-            lambda: './', None, gradio('save_root')).then(
++            lambda: './extensions/', None, gradio('save_root')).then(
+             lambda: 'settings.yaml', None, gradio('save_filename')).then(
+             lambda: gr.update(visible=True), None, gradio('file_saver'))
+
+diff --git a/server.py b/server.py
+index 681fe4e7..5a6ed233 100644
+--- a/server.py
++++ b/server.py
+@@ -181,8 +181,8 @@ if __name__ == "__main__":
+     settings_file = None
+     if shared.args.settings is not None and Path(shared.args.settings).exists():
+         settings_file = Path(shared.args.settings)
+-    elif Path('settings.yaml').exists():
+-        settings_file = Path('settings.yaml')
++    elif Path('./extensions/settings.yaml').exists():
++        settings_file = Path('./extensions/settings.yaml')
+     elif Path('settings.json').exists():
+         settings_file = Path('settings.json')
