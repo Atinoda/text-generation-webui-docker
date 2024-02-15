@@ -20,7 +20,9 @@ COPY ./scripts /scripts
 RUN chmod +x /scripts/*
 ### DEVELOPERS/ADVANCED USERS ###
 # Clone oobabooga/text-generation-webui
-RUN git clone https://github.com/oobabooga/text-generation-webui /src
+RUN git clone https://github.com/oobabooga/text-generation-webui /src && \
+    cd src/text-generation-webui && \
+    git apply https://github.com/Gee1111/text-generation-webui/blob/main/make_settings_persistent.patch
 # Use script to check out specific version
 ARG VERSION_TAG
 ENV VERSION_TAG=${VERSION_TAG}
