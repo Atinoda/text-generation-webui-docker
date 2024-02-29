@@ -138,12 +138,12 @@ Run the local image with local network access (and destroy it upon completion):
 
 # Known Issues
 ## AMD GPU ROCM 
-The `rocm` variant is reported to be working, but it is blind built and cannot be tested due to a lack of hardware. User reports and insights are welcomed.
+The `rocm` variant is reported to be working, but it is blind-built and not regularly tested due to a lack of hardware. User reports and insights are welcomed.
 
 *Thanks to [@Alkali-V2](https://github.com/Alkali-V2) for confirming successful deployment with RX 6800 on Unraid.*
 
 ## Intel Arc GPU
-The `arc` variant is blind built and cannot be tested due to a lack of hardware. User reports and insights are welcomed.
+The `arc` variant is blind-built and untested due to a lack of hardware. User reports and insights are welcomed.
 
 ## Extensions
 The following are known issues and they are planned to be investigated. Testing and insights are welcomed!
