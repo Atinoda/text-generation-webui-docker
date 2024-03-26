@@ -63,7 +63,7 @@ echo "=== Image build date: $BUILD_DATE ==="
 
 # Assemble CMD and extra launch args
 eval "extra_launch_args=($EXTRA_LAUNCH_ARGS)"
-LAUNCHER=($@ $extra_launch_args)
+LAUNCHER=($@ ${extra_launch_args[@]})
 
 # Launch the server with ${CMD[@]} + ${EXTRA_LAUNCH_ARGS[@]}
 "${LAUNCHER[@]}"

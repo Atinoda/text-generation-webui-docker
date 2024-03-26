@@ -153,7 +153,9 @@ The following are known issues and they are planned to be investigated. Testing 
 - `superbooga`/`superboogav2`: Crashes on startup
 
 ## Kubernetes
-Please see [EXTRA_LAUNCH_ARGS are not honored #25](https://github.com/Atinoda/text-generation-webui-docker/issues/25) for fixing deployments. *Thanks to @jrsperry for reporting, and @accountForIssues for sharing a workaround (TLDR: Escape space characters with `\ `, instead of writing as ` ` .)*
+~~Please see [EXTRA_LAUNCH_ARGS are not honored #25](https://github.com/Atinoda/text-generation-webui-docker/issues/25) for fixing deployments. *Thanks to @jrsperry for reporting, and @accountForIssues for sharing a workaround (TLDR: Escape space characters with `\ `, instead of writing as ` ` .)*~~
+
+From `snapshot-2024-03-24` onwards, this workaround should not be necessary - but existing installations using it should remain functional with no required changes. **Please report if you have an issue!** This notice will be removed in due course. *Thanks to @[Artem-B](https://github.com/Artem-B) for finding the root cause and contributing a fix.*
 
 # Contributions
 Contributions are welcomed - please feel free to submit a PR. More variants (e.g., AMD/ROC-M support) and Windows support can help lower the barrier to entry, make this technology accessible to as many people as possible, and push towards democratising the severe impacts that AI is having on our society.
