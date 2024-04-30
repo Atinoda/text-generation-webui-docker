@@ -26,7 +26,7 @@ This repo provides a template `docker-compose.yml` and a structured `config` fol
 This is the recommended deployment method (it is the easiest and quickest way to manage folders and settings through updates and reinstalls). The recommended variant is `default` (it is the full version of the standard application with all default bundled extensions installed, set up for Nvidia GPU accelerated inference).
 
 ### Select variant
-Each variant has the 'extras' included in `default` but has some changes made as described in the table. Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pulling an untagged variant will pull the latest stable release. Unstable, latest versions are available via nightly builds.
+Tagged release versions are published on a regular basis - check [hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui) for available tags. Pulling an untagged variant will pull the latest stable release. Unstable, latest versions are available via nightly builds.
 
 Choose the desired variant by setting the image `:tag` in `docker-compose.yml` using the pattern `{VARIANT}-{PLATFORM}`, or `{VARIANT}-{PLATFORM}-{VERSION}` to specify a specific release.
 
@@ -151,11 +151,6 @@ The following are known issues and they are planned to be investigated. Testing 
 - `ngrok`: Requires an account, causes a crash
 - `silero_tts`: Does not work due to pydantic dependency problem
 - `superbooga`/`superboogav2`: Crashes on startup
-
-## Kubernetes
-~~Please see [EXTRA_LAUNCH_ARGS are not honored #25](https://github.com/Atinoda/text-generation-webui-docker/issues/25) for fixing deployments. *Thanks to @jrsperry for reporting, and @accountForIssues for sharing a workaround (TLDR: Escape space characters with `\ `, instead of writing as ` ` .)*~~
-
-From `snapshot-2024-03-24` onwards, this workaround should not be necessary - but existing installations using it should remain functional with no required changes. **Please report if you have an issue!** This notice will be removed in due course. *Thanks to @[Artem-B](https://github.com/Artem-B) for finding the root cause and contributing a fix.*
 
 # Contributions
 Contributions are welcomed - please feel free to submit a PR. More variants (e.g., AMD/ROC-M support) and Windows support can help lower the barrier to entry, make this technology accessible to as many people as possible, and push towards democratising the severe impacts that AI is having on our society.
