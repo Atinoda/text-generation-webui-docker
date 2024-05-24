@@ -1,6 +1,3 @@
-# Announcements
-- ~~Variant `default-nvidia-dev-phi3-exllama` is available on Dockerhub. This version has breaking dependency changes made to specifically support `turboderp/Phi-3-mini-128k-instruct-exl2` using the `ExLlamav2_HF` backend, running on Linux (and probably WSL2), and with Nvidia acceleration only. It is a temporary preview until dependencies are updated upstream. Enjoy!~~ EXL quants of `Phi-3` are supported in the `exllamav2` backend for `default-nvidia` as of the `2024.05.12` version.
-
 # Introduction
 This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration corresponding to a standard deployment of the application with all extensions enabled, and a base version without extensions. Versions are offered for Nvidia GPU `nvidia`, AMD GPU (unstable) `rocm`, Intel Arc (unstable) `arc`, and CPU-only `cpu`. Pre-built images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui).
 
