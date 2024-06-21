@@ -136,6 +136,28 @@ Run the local image with local network access (and destroy it upon completion):
 
 `docker run -it --rm -e EXTRA_LAUNCH_ARGS="--listen --verbose" --gpus all -p 7860:7860 text-generation-webui:local`
 
+For a more permanent version, you may choose to use a command such as this, please note this may require adjusting permissions in the docker mounts.
+```
+docker run --name textgen \
+  --gpus all \
+  -e EXTRA_LAUNCH_ARGS="--verbose --listen --api --model llama-2-13b-chat.Q8_0.gguf" \ # Note change your model to your preference.
+  -v /root/textgensettings.yaml:/app/settings.yaml \
+  -v ./textgen_loras:/app/loras \
+  -v ./textgen_characters:/app/characters \
+  -v ./textgen_softprompts:/app/softprompts \
+  -v ./textgen_models:/app/models \
+  -v ./textgen_prompts:/app/prompts \
+  -v ./textgen_training:/app/training \
+  -v ./textgen_extensions:/app/extensions \
+  -v ./textgen_instruction-templates:/app/instruction-templates \
+  -v ./textgen_modules:/app/modules \
+  -p 7860:7860 \
+  -p 5000:5000 \
+  -p 5005:5005 \
+  --restart unless-stopped \
+  -d atinoda/text-generation-webui:default-nvidia
+```
+
 # Known Issues
 ## AMD GPU ROCM 
 The `rocm` variant is reported to be working, but it is blind-built and not regularly tested due to a lack of hardware. User reports and insights are welcomed.
