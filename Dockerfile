@@ -183,6 +183,19 @@ RUN echo "Nvidia Extended (No AVX2)" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
+# Extended with TensorRT-LLM
+FROM run_base AS default-nvidia-tensorrtllm
+# Copy venv
+COPY --from=app_nvidia_x $VIRTUAL_ENV $VIRTUAL_ENV
+# Install TensorRT-LLM
+RUN apt install -y openmpi-bin libopenmpi-dev
+RUN pip3 install tensorrt_llm==0.10.0 -U --pre --extra-index-url https://pypi.nvidia.com
+ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+# Variant parameters
+RUN echo "Nvidia Extended (TensorRT-LLM)" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py"]
+
 
 # ROCM
 # Base
