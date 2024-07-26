@@ -48,6 +48,21 @@ FROM app_nvidia AS app_nvidia_x
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
 
+# Base No AVX2
+FROM app_base AS app_nvidia_noavx2
+# Install pytorch for CUDA 12.1
+RUN pip3 install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 \
+    --index-url https://download.pytorch.org/whl/cu121 
+# Install oobabooga/text-generation-webui
+RUN ls /app
+RUN pip3 install -r /app/requirements_noavx2.txt
+
+# Extended No AVX2
+FROM app_nvidia_x AS app_nvidia_noavx2_x
+# Install extensions
+RUN chmod +x /scripts/build_extensions.sh && \
+    . /scripts/build_extensions.sh
+
 
 # ROCM [Untested. Widen your hardware support, AMD!]
 # Base
@@ -156,6 +171,15 @@ FROM run_base AS default-nvidia
 COPY --from=app_nvidia_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "Nvidia Extended" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3", "/app/server.py"]
+
+# Extended without AVX2
+FROM run_base AS default-nvidia-noavx2
+# Copy venv
+COPY --from=app_nvidia_noavx2_x $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "Nvidia Extended (No AVX2)" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3", "/app/server.py"]
 
