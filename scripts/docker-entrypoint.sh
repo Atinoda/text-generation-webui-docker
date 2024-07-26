@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# Function to handle keyboard interrupt
-function ctrl_c {
-    echo -e "\nKilling container!"
-    # Add your cleanup actions here
-    exit 0
-}
-# Register the keyboard interrupt handler
-trap ctrl_c SIGTERM SIGINT SIGQUIT SIGHUP
-
 # Generate default configs if empty
 CONFIG_DIRECTORIES=("characters" "instruction-templates" "loras" "models" "presets" "prompts" "training/datasets" "training/formats")
 for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
@@ -66,4 +57,4 @@ eval "extra_launch_args=($EXTRA_LAUNCH_ARGS)"
 LAUNCHER=($@ ${extra_launch_args[@]})
 
 # Launch the server with ${CMD[@]} + ${EXTRA_LAUNCH_ARGS[@]}
-"${LAUNCHER[@]}"
+exec "${LAUNCHER[@]}"
