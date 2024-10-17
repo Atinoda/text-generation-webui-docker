@@ -7,6 +7,7 @@ services:
 #      - BUILD_EXTENSIONS_LIVE="coqui_tts whisper_stt" # Install named extensions during every container launch. THIS WILL SIGNIFICANLTLY SLOW LAUNCH TIME AND IS NORMALLY NOT REQUIRED.
 #      - OPENEDAI_EMBEDDING_MODEL=intfloat/e5-large-v2  # Specify custom model for embeddings
 #      - OPENEDAI_EMBEDDING_DEVICE=cuda  # Specify processing device for embeddings
+    init: true  # Runs an init process (PID 1) that forwards signals and reaps processes
     ports:
       - 7860:7860  # Default web port
 #      - 5000:5000  # Default API port
