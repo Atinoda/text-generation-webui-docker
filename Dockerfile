@@ -37,7 +37,7 @@ RUN cp -ar /src /app
 # Base
 FROM app_base AS app_nvidia
 # Install pytorch for CUDA 12.1
-RUN pip3 install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 \
+RUN pip3 install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 \
     --index-url https://download.pytorch.org/whl/cu121 
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements.txt
@@ -51,7 +51,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base No AVX2
 FROM app_base AS app_nvidia_noavx2
 # Install pytorch for CUDA 12.1
-RUN pip3 install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 \
+RUN pip3 install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 \
     --index-url https://download.pytorch.org/whl/cu121 
 # Install oobabooga/text-generation-webui
 RUN ls /app
@@ -68,8 +68,8 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base
 FROM app_base AS app_rocm
 # Install pytorch for ROCM
-RUN pip3 install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 \
-    --index-url https://download.pytorch.org/whl/rocm5.6
+RUN pip3 install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 \
+    --index-url https://download.pytorch.org/whl/rocm6.1
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements_amd.txt
 
