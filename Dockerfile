@@ -128,6 +128,9 @@ FROM ubuntu:22.04 AS run_base
 # Runtime pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-venv python3-dev git
+# Extension dependencies
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    ffmpeg
 # Copy app and src
 COPY --from=app_base /app /app
 COPY --from=app_base /src /src
