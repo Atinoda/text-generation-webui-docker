@@ -43,7 +43,7 @@ if [ $? -ne 0 ]; then
   COMMITS_BEHIND="UNKNOWN"
 else
   # The command executed successfully
-  COMMITS_BEHIND=$(git rev-list HEAD..main --count)
+  COMMITS_BEHIND=$(git rev-list HEAD..origin/main --count)
 fi
 echo "=== (This version is $COMMITS_BEHIND commits behind origin main) ===" 
 cd $cur_dir
