@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Generate default configs if empty
-CONFIG_DIRECTORIES=("characters" "instruction-templates" "loras" "models" "presets" "prompts" "training/datasets" "training/formats")
+CONFIG_DIRECTORIES=("characters" "grammars" "instruction-templates" "loras" "models" "presets" "prompts" "training/datasets" "training/formats")
 for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
-  if [ -z "$(ls /app/"$config_dir")" ]; then
+  if [ -z "$(ls /app/user_data/"$config_dir")" ]; then
     echo "*** Initialising config for: '$config_dir' ***"
-    cp -ar /src/"$config_dir"/* /app/"$config_dir"/
-    chown -R 1000:1000 /app/"$config_dir"  # Not ideal... but convenient.
+    cp -ar /src/user_data/"$config_dir"/* /app/user_data/"$config_dir"/
+    chown -R 1000:1000 /app/user_data/"$config_dir"  # Not ideal... but convenient.
   fi
 done
 
