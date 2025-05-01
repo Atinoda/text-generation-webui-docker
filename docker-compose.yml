@@ -14,13 +14,14 @@ services:
 #      - 5005:5005  # Default streaming port
     volumes:
       - ./config/cache:/root/.cache  # WARNING: Libraries may save large files here!
-      - ./config/characters:/app/characters
-      - ./config/instruction-templates:/app/instruction-templates
-      - ./config/loras:/app/loras
-      - ./config/models:/app/models  # WARNING - very large files!
-      - ./config/presets:/app/presets
-      - ./config/prompts:/app/prompts
-      - ./config/training:/app/training
+      - ./config/characters:/app/user_data/characters
+      - ./config/grammars:/app/user_data/grammars
+      - ./config/instruction-templates:/app/user_data/instruction-templates
+      - ./config/loras:/app/user_data/loras
+      - ./config/models:/app/user_data/models  # WARNING - very large files!
+      - ./config/presets:/app/user_data/presets
+      - ./config/prompts:/app/user_data/prompts
+      - ./config/training:/app/user_data/training
 #      - ./config/extensions:/app/extensions  # Persist all extensions
 #      - ./config/extensions/coqui_tts:/app/extensions/coqui_tts  # Persist a single extension
     logging:

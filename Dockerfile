@@ -6,13 +6,13 @@
 FROM ubuntu:22.04 AS app_base
 # Pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    git vim build-essential python3-dev python3-venv python3-pip
+    git vim build-essential python3.11 python3-dev python3.11-venv python3-pip
 # Instantiate venv and pre-activate
 RUN pip3 install virtualenv
 RUN virtualenv /venv
 # Credit, Itamar Turner-Trauring: https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
 ENV VIRTUAL_ENV=/venv
-RUN python3 -m venv $VIRTUAL_ENV
+RUN python3.11 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install --upgrade pip setuptools
 # Copy and enable all scripts
@@ -36,11 +36,11 @@ RUN cp -ar /src /app
 # NVIDIA-CUDA [Daily driver. Well done - you are the incumbent, Nvidia! Don't exploit your position.]
 # Base
 FROM app_base AS app_nvidia
-# Install pytorch for CUDA 12.1
-RUN pip3 install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 \
-    --index-url https://download.pytorch.org/whl/cu121 
+# Install pytorch for CUDA 12.4
+RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
+    --index-url https://download.pytorch.org/whl/cu124
 # Install oobabooga/text-generation-webui
-RUN pip3 install -r /app/requirements.txt
+RUN pip3 install -r /app/requirements/full/requirements.txt
 
 # Extended
 FROM app_nvidia AS app_nvidia_x
@@ -50,12 +50,12 @@ RUN chmod +x /scripts/build_extensions.sh && \
 
 # Base No AVX2
 FROM app_base AS app_nvidia_noavx2
-# Install pytorch for CUDA 12.1
-RUN pip3 install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 \
-    --index-url https://download.pytorch.org/whl/cu121 
+# Install pytorch for CUDA 12.4
+RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
+    --index-url https://download.pytorch.org/whl/cu124
 # Install oobabooga/text-generation-webui
 RUN ls /app
-RUN pip3 install -r /app/requirements_noavx2.txt
+RUN pip3 install -r /app/requirements/full/requirements_noavx2.txt
 
 # Extended No AVX2
 FROM app_nvidia_x AS app_nvidia_noavx2_x
@@ -68,10 +68,10 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base
 FROM app_base AS app_rocm
 # Install pytorch for ROCM
-RUN pip3 install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 \
+RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
     --index-url https://download.pytorch.org/whl/rocm6.1
 # Install oobabooga/text-generation-webui
-RUN pip3 install -r /app/requirements_amd.txt
+RUN pip3 install -r /app/requirements/full/requirements_amd.txt
 
 # Extended
 FROM app_rocm AS app_rocm_x
@@ -92,7 +92,7 @@ RUN pip3 install install torch==2.1.0a0 torchvision==0.16.0a0 torchaudio==2.1.0a
     intel-extension-for-pytorch==2.1.10 \
     --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/
 # Install oobabooga/text-generation-webui
-RUN pip3 install -r /app/requirements_cpu_only.txt
+RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
 
 # Extended
 FROM app_arc AS app_arc_x
@@ -104,10 +104,10 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base
 FROM app_base AS app_cpu
 # Install pytorch for CPU
-RUN pip3 install torch==2.2.1 torchvision==0.17.1 torchaudio==2.2.1 \
+RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
     --index-url https://download.pytorch.org/whl/cpu
 # Install oobabooga/text-generation-webui
-RUN pip3 install -r /app/requirements_cpu_only.txt
+RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
 
 # Extended
 FROM app_cpu AS app_cpu_x
@@ -127,7 +127,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 FROM ubuntu:22.04 AS run_base
 # Runtime pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    python3-venv python3-dev git
+    python3.11 python3-dev python3.11-venv git
 # Extension dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
     ffmpeg
@@ -166,7 +166,7 @@ COPY --from=app_nvidia $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "Nvidia Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-nvidia
@@ -175,7 +175,7 @@ COPY --from=app_nvidia_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "Nvidia Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 # Extended without AVX2
 FROM run_base AS default-nvidia-noavx2
@@ -184,7 +184,7 @@ COPY --from=app_nvidia_noavx2_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "Nvidia Extended (No AVX2)" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 # Extended with TensorRT-LLM
 FROM run_base AS default-nvidia-tensorrtllm
@@ -197,7 +197,7 @@ ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 # Variant parameters
 RUN echo "Nvidia Extended (TensorRT-LLM)" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 
 # ROCM
@@ -208,7 +208,7 @@ COPY --from=app_rocm $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "ROCM Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-rocm
@@ -217,7 +217,7 @@ COPY --from=app_rocm_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "ROCM Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 
 # ARC
@@ -228,7 +228,7 @@ COPY --from=app_arc $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "ARC Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-arc
@@ -237,7 +237,7 @@ COPY --from=app_arc_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "ARC Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 
 # CPU
@@ -248,7 +248,7 @@ COPY --from=app_cpu $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "CPU Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-cpu
@@ -257,4 +257,4 @@ COPY --from=app_cpu_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "CPU Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3", "/app/server.py"]
+CMD ["python3.11", "/app/server.py"]

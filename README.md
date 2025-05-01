@@ -1,3 +1,6 @@
+# Announcement
+The updates to support version 3 of text-generation-webui require that the bind mount paths are updated **in the container**. Please review the new example `docker-compose.yml` file for details and check the releases page for more information. **TLDR; `*:/app/*` must be updated to `*:/app/user_data/*` for most paths.**
+
 # Introduction
 This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration corresponding to a standard deployment of the application with all extensions enabled, and a base version without extensions. Versions are offered for Nvidia GPU `nvidia`, AMD GPU (unstable) `rocm`, Intel Arc (unstable) `arc`, and CPU-only `cpu`. Pre-built images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui).
 
