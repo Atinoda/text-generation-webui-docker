@@ -18,6 +18,7 @@ services:
       - ./config/grammars:/app/user_data/grammars
       - ./config/instruction-templates:/app/user_data/instruction-templates
       - ./config/loras:/app/user_data/loras
+      - ./config/logs:/app/user_data/logs  # Persist and access the chat logs
       - ./config/models:/app/user_data/models  # WARNING - very large files!
       - ./config/presets:/app/user_data/presets
       - ./config/prompts:/app/user_data/prompts

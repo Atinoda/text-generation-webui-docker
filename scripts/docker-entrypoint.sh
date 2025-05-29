@@ -6,9 +6,9 @@ for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
   if [ -z "$(ls /app/user_data/"$config_dir")" ]; then
     echo "*** Initialising config for: '$config_dir' ***"
     cp -ar /src/user_data/"$config_dir"/* /app/user_data/"$config_dir"/
-    chown -R 1000:1000 /app/user_data/"$config_dir"  # Not ideal... but convenient.
   fi
 done
+chown -R 1000:1000 /app/user_data  # Not ideal... but convenient.
 
 # Populate extension folders if empty
 EXTENSIONS_SRC="/src/extensions"
