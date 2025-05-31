@@ -40,9 +40,9 @@ Choose the desired variant by setting the image `:tag` in `docker-compose.yml` u
 
 | Platform | Description | 
 |---|---|
-| `*-nvidia` | CUDA 12.1 inference acceleration. |
-| `*-nvidia-noavx2` | CUDA 12.1 inference acceleration with no AVX2 CPU instructions. *Typical use-case is legacy CPU with modern GPU.* |
-| `*-nvidia-tenssorrtllm` | CUDA 12.1 inference acceleration with additional TensorRT-LLM library pre-installed. |
+| `*-nvidia` | CUDA 12.4 inference acceleration. |
+| `*-nvidia-noavx2` | CUDA 12.4 inference acceleration with no AVX2 CPU instructions. *Typical use-case is legacy CPU with modern GPU.* |
+| `*-nvidia-tenssorrtllm` | CUDA 12.4 inference acceleration with additional TensorRT-LLM library pre-installed. *This has not been updated in a long time!* |
 | `*-cpu` | CPU-only inference. *Has become surprisingly fast since the early days!* |
 | `*-rocm` | ROCM 5.6 inference acceleration. *Experimental and unstable.* |
 | `*-arc` | Intel Arc XPU and oneAPI inference acceleration.  **Not compatible with Intel integrated GPU (iGPU).** *Experimental and unstable.* |
