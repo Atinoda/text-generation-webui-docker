@@ -89,7 +89,7 @@ RUN pip3 install dpcpp-cpp-rt==2024.0 mkl-dpcpp==2024.0
 # !!! Fails to build (stale repo) !!!
 # RUN pip3 install pyuv
 # Install pytorch for ARC
-RUN pip3 install install torch==2.1.0a0 torchvision==0.16.0a0 torchaudio==2.1.0a0 \
+RUN pip3 install torch==2.1.0a0 torchvision==0.16.0a0 torchaudio==2.1.0a0 \
     intel-extension-for-pytorch==2.1.10 \
     --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/
 # Install oobabooga/text-generation-webui
