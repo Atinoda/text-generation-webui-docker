@@ -6,7 +6,7 @@
 FROM ubuntu:22.04 AS app_base
 # Pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    git vim build-essential python3.11 python3-dev python3.11-venv python3-pip
+    git vim build-essential python3.11 python3.11-dev python3.11-venv python3-pip
 # Instantiate venv and pre-activate
 RUN pip3 install virtualenv
 RUN virtualenv /venv
@@ -47,6 +47,7 @@ FROM app_nvidia AS app_nvidia_x
 # Install extensions
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
+
 
 # Base No AVX2
 FROM app_base AS app_nvidia_noavx2
@@ -115,7 +116,6 @@ FROM app_cpu AS app_cpu_x
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
 
-
 # APPLE [Not possible. Open up your graphics acceleration API, Apple!]
 
 
@@ -127,7 +127,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 FROM ubuntu:22.04 AS run_base
 # Runtime pre-reqs
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    python3.11 python3-dev python3.11-venv git
+    python3.11 python3.11-dev python3.11-venv git build-essential
 # Extension dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
     ffmpeg
