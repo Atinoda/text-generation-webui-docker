@@ -37,8 +37,7 @@ RUN cp -ar /src /app
 # Base
 FROM app_base AS app_nvidia
 # Install pytorch for CUDA 12.4
-RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
-    --index-url https://download.pytorch.org/whl/cu124
+RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements.txt
 
@@ -52,8 +51,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base No AVX2
 FROM app_base AS app_nvidia_noavx2
 # Install pytorch for CUDA 12.4
-RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
-    --index-url https://download.pytorch.org/whl/cu124
+RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 # Install oobabooga/text-generation-webui
 RUN ls /app
 RUN pip3 install -r /app/requirements/full/requirements_noavx2.txt
@@ -69,8 +67,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base
 FROM app_base AS app_rocm
 # Install pytorch for ROCM
-RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
-    --index-url https://download.pytorch.org/whl/rocm6.1
+RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/rocm6.2.4
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements_amd.txt
 
@@ -89,8 +86,7 @@ RUN pip3 install dpcpp-cpp-rt==2024.0 mkl-dpcpp==2024.0
 # !!! Fails to build (stale repo) !!!
 # RUN pip3 install pyuv
 # Install pytorch for ARC
-RUN pip3 install torch==2.1.0a0 torchvision==0.16.0a0 torchaudio==2.1.0a0 \
-    intel-extension-for-pytorch==2.1.10 \
+RUN pip3 install torch==2.1.0a0 intel-extension-for-pytorch==2.1.10+xpu \
     --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us/
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
@@ -105,8 +101,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base
 FROM app_base AS app_cpu
 # Install pytorch for CPU
-RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 \
-    --index-url https://download.pytorch.org/whl/cpu
+RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
 
