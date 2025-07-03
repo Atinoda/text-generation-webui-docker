@@ -200,6 +200,8 @@ CMD ["python3.11", "/app/server.py"]
 FROM run_base AS base-rocm
 # Copy venv
 COPY --from=app_rocm $VIRTUAL_ENV $VIRTUAL_ENV
+# Additional dependencies
+RUN apt install -y libvulkan1
 # Variant parameters
 RUN echo "ROCM Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
@@ -209,6 +211,8 @@ CMD ["python3.11", "/app/server.py"]
 FROM run_base AS default-rocm
 # Copy venv
 COPY --from=app_rocm_x $VIRTUAL_ENV $VIRTUAL_ENV
+# Additional dependencies
+RUN apt install -y libvulkan1
 # Variant parameters
 RUN echo "ROCM Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
