@@ -36,8 +36,8 @@ RUN cp -ar /src /app
 # NVIDIA-CUDA [Daily driver. Well done - you are the incumbent, Nvidia! Don't exploit your position.]
 # Base
 FROM app_base AS app_nvidia
-# Install pytorch for CUDA 12.4
-RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+# Install pytorch for CUDA 12.8
+RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/cu128
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements.txt
 
@@ -50,8 +50,8 @@ RUN chmod +x /scripts/build_extensions.sh && \
 
 # Base No AVX2
 FROM app_base AS app_nvidia_noavx2
-# Install pytorch for CUDA 12.4
-RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+# Install pytorch for CUDA 12.8
+RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/cu128
 # Install oobabooga/text-generation-webui
 RUN ls /app
 RUN pip3 install -r /app/requirements/full/requirements_noavx2.txt
@@ -67,7 +67,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base
 FROM app_base AS app_rocm
 # Install pytorch for ROCM
-RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/rocm6.2.4
+RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/rocm6.2.4
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements_amd.txt
 
@@ -101,7 +101,7 @@ RUN chmod +x /scripts/build_extensions.sh && \
 # Base
 FROM app_base AS app_cpu
 # Install pytorch for CPU
-RUN pip3 install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/cpu
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
 
