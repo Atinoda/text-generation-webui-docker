@@ -46,6 +46,8 @@ FROM app_nvidia AS app_nvidia_x
 # Install extensions
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
+# HACK: Patch for pandas-numpy dependency error
+RUN pip3 install --force-reinstall pandas==2.*
 
 
 # Base No AVX2
@@ -61,6 +63,8 @@ FROM app_nvidia_x AS app_nvidia_noavx2_x
 # Install extensions
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
+# HACK: Patch for pandas-numpy dependency error
+RUN pip3 install --force-reinstall pandas==2.*
 
 
 # ROCM [Untested. Widen your hardware support, AMD!]
@@ -75,6 +79,8 @@ RUN pip3 install -r /app/requirements/full/requirements_amd.txt
 FROM app_rocm AS app_rocm_x
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
+# HACK: Patch for pandas-numpy dependency error
+RUN pip3 install --force-reinstall pandas==2.*
 
 
 # ARC [Untested, no hardware. Give AMD and Nvidia an incentive to compete, Intel!]
@@ -95,6 +101,8 @@ RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
 FROM app_arc AS app_arc_x
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
+# HACK: Patch for pandas-numpy dependency error
+RUN pip3 install --force-reinstall pandas==2.*
 
 
 # CPU [Everyone can join in, as long as they have the patience.]
@@ -110,6 +118,8 @@ FROM app_cpu AS app_cpu_x
 # Install extensions
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
+# HACK: Patch for pandas-numpy dependency error
+RUN pip3 install --force-reinstall pandas==2.*
 
 # APPLE [Not possible. Open up your graphics acceleration API, Apple!]
 
