@@ -50,21 +50,6 @@ RUN chmod +x /scripts/build_extensions.sh && \
 RUN pip3 install --force-reinstall pandas==2.*
 
 
-# Base No AVX2
-FROM app_base AS app_nvidia_noavx2
-# Install pytorch for CUDA 12.8
-RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/cu128
-# Install oobabooga/text-generation-webui
-RUN ls /app
-RUN pip3 install -r /app/requirements/full/requirements_noavx2.txt
-
-# Extended No AVX2
-FROM app_nvidia_x AS app_nvidia_noavx2_x
-# Install extensions
-RUN chmod +x /scripts/build_extensions.sh && \
-    . /scripts/build_extensions.sh
-# HACK: Patch for pandas-numpy dependency error
-RUN pip3 install --force-reinstall pandas==2.*
 
 
 # ROCM [Untested. Widen your hardware support, AMD!]
@@ -179,28 +164,6 @@ FROM run_base AS default-nvidia
 COPY --from=app_nvidia_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "Nvidia Extended" > /variant.txt
-ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
-
-# Extended without AVX2
-FROM run_base AS default-nvidia-noavx2
-# Copy venv
-COPY --from=app_nvidia_noavx2_x $VIRTUAL_ENV $VIRTUAL_ENV
-# Variant parameters
-RUN echo "Nvidia Extended (No AVX2)" > /variant.txt
-ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
-
-# Extended with TensorRT-LLM
-FROM run_base AS default-nvidia-tensorrtllm
-# Copy venv
-COPY --from=app_nvidia_x $VIRTUAL_ENV $VIRTUAL_ENV
-# Install TensorRT-LLM
-RUN apt install -y openmpi-bin libopenmpi-dev
-RUN pip3 install tensorrt_llm==0.10.0 -U --pre --extra-index-url https://pypi.nvidia.com
-ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-# Variant parameters
-RUN echo "Nvidia Extended (TensorRT-LLM)" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3.11", "/app/server.py"]
 
