@@ -4,15 +4,18 @@
 
 # COMMON
 FROM ubuntu:22.04 AS app_base
+ENV DEBIAN_FRONTEND=noninteractive
 # Pre-reqs
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    git vim build-essential python3.11 python3.11-dev python3.11-venv python3-pip
+    git vim build-essential python3.13 python3.13-dev python3.13-venv python3-pip
 # Instantiate venv and pre-activate
 RUN pip3 install virtualenv
 RUN virtualenv /venv
 # Credit, Itamar Turner-Trauring: https://pythonspeed.com/articles/activate-virtualenv-dockerfile/
 ENV VIRTUAL_ENV=/venv
-RUN python3.11 -m venv $VIRTUAL_ENV
+RUN python3.13 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install --upgrade pip setuptools
 # Copy and enable all scripts
@@ -37,7 +40,7 @@ RUN cp -ar /src /app
 # Base
 FROM app_base AS app_nvidia
 # Install pytorch for CUDA 12.8
-RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/cu128
+RUN pip3 install torch==2.9.1 --index-url https://download.pytorch.org/whl/cu128
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements.txt
 
@@ -46,17 +49,13 @@ FROM app_nvidia AS app_nvidia_x
 # Install extensions
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
-# HACK: Patch for pandas-numpy dependency error
-RUN pip3 install --force-reinstall pandas==2.*
-
-
 
 
 # ROCM [Untested. Widen your hardware support, AMD!]
 # Base
 FROM app_base AS app_rocm
 # Install pytorch for ROCM
-RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/rocm6.2.4
+RUN pip3 install torch==2.9.1 --index-url https://download.pytorch.org/whl/rocm6.4
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements_amd.txt
 
@@ -64,8 +63,6 @@ RUN pip3 install -r /app/requirements/full/requirements_amd.txt
 FROM app_rocm AS app_rocm_x
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
-# HACK: Patch for pandas-numpy dependency error
-RUN pip3 install --force-reinstall pandas==2.*
 
 
 # ARC [Untested, no hardware. Give AMD and Nvidia an incentive to compete, Intel!]
@@ -86,15 +83,13 @@ RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
 FROM app_arc AS app_arc_x
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
-# HACK: Patch for pandas-numpy dependency error
-RUN pip3 install --force-reinstall pandas==2.*
 
 
 # CPU [Everyone can join in, as long as they have the patience.]
 # Base
 FROM app_base AS app_cpu
 # Install pytorch for CPU
-RUN pip3 install torch==2.7.1 --index-url https://download.pytorch.org/whl/cpu
+RUN pip3 install torch==2.9.1 --index-url https://download.pytorch.org/whl/cpu
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements_cpu_only.txt
 
@@ -103,8 +98,6 @@ FROM app_cpu AS app_cpu_x
 # Install extensions
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
-# HACK: Patch for pandas-numpy dependency error
-RUN pip3 install --force-reinstall pandas==2.*
 
 # APPLE [Not possible. Open up your graphics acceleration API, Apple!]
 
@@ -115,9 +108,12 @@ RUN pip3 install --force-reinstall pandas==2.*
 
 # COMMON
 FROM ubuntu:22.04 AS run_base
+ENV DEBIAN_FRONTEND=noninteractive
 # Runtime pre-reqs
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    python3.11 python3.11-dev python3.11-venv git build-essential
+    python3.13 python3.13-dev python3.13-venv git build-essential
 # Extension dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
     ffmpeg
@@ -156,7 +152,7 @@ COPY --from=app_nvidia $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "Nvidia Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-nvidia
@@ -165,7 +161,7 @@ COPY --from=app_nvidia_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "Nvidia Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]
 
 
 # ROCM
@@ -178,7 +174,7 @@ RUN apt install -y libvulkan1
 # Variant parameters
 RUN echo "ROCM Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-rocm
@@ -189,7 +185,7 @@ RUN apt install -y libvulkan1
 # Variant parameters
 RUN echo "ROCM Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]
 
 
 # ARC
@@ -200,7 +196,7 @@ COPY --from=app_arc $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "ARC Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-arc
@@ -209,7 +205,7 @@ COPY --from=app_arc_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "ARC Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]
 
 
 # CPU
@@ -220,7 +216,7 @@ COPY --from=app_cpu $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "CPU Base" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]
 
 # Extended
 FROM run_base AS default-cpu
@@ -229,4 +225,4 @@ COPY --from=app_cpu_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "CPU Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
-CMD ["python3.11", "/app/server.py"]
+CMD ["python3.13", "/app/server.py"]

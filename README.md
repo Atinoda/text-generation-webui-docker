@@ -1,6 +1,3 @@
-# Announcement
-The updates to support version 3 of text-generation-webui require that the bind mount paths are updated **in the container**. Please review the new example `docker-compose.yml` file for details and check the releases page for more information. **TLDR; `*:/app/*` must be updated to `*:/app/user_data/*` for most paths.**
-
 # Introduction
 This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration corresponding to a standard deployment of the application with all extensions enabled, and a base version without extensions. Versions are offered for Nvidia GPU `nvidia`, AMD GPU (unstable) `rocm`, Intel Arc (unstable) `arc`, and CPU-only `cpu`. Pre-built images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui).
 
@@ -40,9 +37,7 @@ Choose the desired variant by setting the image `:tag` in `docker-compose.yml` u
 
 | Platform | Description | 
 |---|---|
-| `*-nvidia` | CUDA 12.4 inference acceleration. |
-| `*-nvidia-noavx2` | CUDA 12.4 inference acceleration with no AVX2 CPU instructions. *Typical use-case is legacy CPU with modern GPU.* |
-| `*-nvidia-tenssorrtllm` | CUDA 12.4 inference acceleration with additional TensorRT-LLM library pre-installed. *This has not been updated in a long time!* |
+| `*-nvidia` | CUDA 12.8 inference acceleration. |
 | `*-cpu` | CPU-only inference. *Has become surprisingly fast since the early days!* |
 | `*-rocm` | ROCM 5.6 inference acceleration. *Experimental and unstable.* |
 | `*-arc` | Intel Arc XPU and oneAPI inference acceleration.  **Not compatible with Intel integrated GPU (iGPU).** *Experimental and unstable.* |
