@@ -16,6 +16,7 @@ services:
       - ./config/cache:/root/.cache  # WARNING: Libraries may save large files here!
       - ./config/characters:/app/user_data/characters
       - ./config/grammars:/app/user_data/grammars
+      - ./config/image_models:/app/user_data/image_models  # WARNING - very large files!
       - ./config/instruction-templates:/app/user_data/instruction-templates
       - ./config/loras:/app/user_data/loras
       - ./config/logs:/app/user_data/logs  # Persist and access the chat logs

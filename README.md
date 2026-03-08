@@ -1,3 +1,8 @@
+# Announcement
+New bind mounts have been added for:
+- /app/user_data/mmproj
+- /app/user_data/image_models
+
 # Introduction
 This project dockerises the deployment of [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui) and its variants. It provides a default configuration corresponding to a standard deployment of the application with all extensions enabled, and a base version without extensions. Versions are offered for Nvidia GPU `nvidia`, AMD GPU (unstable) `rocm`, Intel Arc (unstable) `arc`, and CPU-only `cpu`. Pre-built images are available on Docker Hub: [https://hub.docker.com/r/atinoda/text-generation-webui](https://hub.docker.com/r/atinoda/text-generation-webui).
 
