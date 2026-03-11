@@ -39,6 +39,7 @@ Choose the desired variant by setting the image `:tag` in `docker-compose.yml` u
 |---|---|
 | `default-*` | Standard deployment with all default bundled extensions installed. Normal image intended for everyday usage. |
 | `base-*` | Basic deployment with no extensions installed. Slimmer image intended for customisation or lightweight deployment.  |
+| `transformers-*` | Standard deployment with all default bundled extensions installed. The latest version of transformers is re-installed on top of the extensions. *This operation ignores dependencies and may cause extension incompatibilities. However, it may be required to run more recent models.* |
 
 | Platform | Description | 
 |---|---|

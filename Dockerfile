@@ -50,6 +50,11 @@ FROM app_nvidia AS app_nvidia_x
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
 
+# Extended with latest Transformers
+FROM app_nvidia_x AS app_nvidia_x_transformers
+# Install extensions
+RUN pip3 install --upgrade transformers
+
 
 # ROCM [Untested. Widen your hardware support, AMD!]
 # Base
@@ -98,6 +103,11 @@ FROM app_cpu AS app_cpu_x
 # Install extensions
 RUN chmod +x /scripts/build_extensions.sh && \
     . /scripts/build_extensions.sh
+
+# Extended with latest Transformers
+FROM app_cpu_x AS app_cpu_x_transformers
+# Install extensions
+RUN pip3 install --upgrade transformers
 
 # APPLE [Not possible. Open up your graphics acceleration API, Apple!]
 
@@ -163,6 +173,15 @@ RUN echo "Nvidia Extended" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3.13", "/app/server.py"]
 
+# Extended with latest Transformers
+FROM run_base AS transformers-nvidia
+# Copy venv
+COPY --from=app_nvidia_x_transformers $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "Nvidia Extended with latest Transformers" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3.13", "/app/server.py"]
+
 
 # ROCM
 # Base
@@ -224,5 +243,14 @@ FROM run_base AS default-cpu
 COPY --from=app_cpu_x $VIRTUAL_ENV $VIRTUAL_ENV
 # Variant parameters
 RUN echo "CPU Extended" > /variant.txt
+ENV EXTRA_LAUNCH_ARGS=""
+CMD ["python3.13", "/app/server.py"]
+
+# Extended with latest Transformers
+FROM run_base AS transformers-cpu
+# Copy venv
+COPY --from=app_cpu_x_transformers $VIRTUAL_ENV $VIRTUAL_ENV
+# Variant parameters
+RUN echo "CPU Extended with latest Transformers" > /variant.txt
 ENV EXTRA_LAUNCH_ARGS=""
 CMD ["python3.13", "/app/server.py"]
