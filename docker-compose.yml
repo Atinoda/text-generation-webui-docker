@@ -20,11 +20,12 @@ services:
       - ./config/instruction-templates:/app/user_data/instruction-templates
       - ./config/loras:/app/user_data/loras
       - ./config/logs:/app/user_data/logs  # Persist and access the chat logs
-      - ./config/models:/app/user_data/models  # WARNING - very large files!
       - ./config/mmproj:/app/user_data/mmproj  # WARNING - large files!
+      - ./config/models:/app/user_data/models  # WARNING - very large files!
       - ./config/presets:/app/user_data/presets
-      - ./config/prompts:/app/user_data/prompts
+      - ./config/tools:/app/user_data/tools
       - ./config/training:/app/user_data/training
+      - ./config/users:/app/user_data/users
 #      - ./config/extensions:/app/extensions  # Persist all extensions
 #      - ./config/extensions/coqui_tts:/app/extensions/coqui_tts  # Persist a single extension
     logging:

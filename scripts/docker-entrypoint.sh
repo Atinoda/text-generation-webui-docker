@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Generate default configs if empty
-CONFIG_DIRECTORIES=("characters" "grammars" "instruction-templates" "loras" "models" "presets" "prompts" "training/datasets" "training/formats")
+CONFIG_DIRECTORIES=("characters" "grammars" "image_models" "instruction-templates" "loras" "mmproj" "models" "presets" "tools" "training/datasets" "users")
 for config_dir in "${CONFIG_DIRECTORIES[@]}"; do
   if [ -z "$(ls /app/user_data/"$config_dir")" ]; then
     echo "*** Initialising config for: '$config_dir' ***"
