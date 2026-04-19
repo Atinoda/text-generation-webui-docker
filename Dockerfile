@@ -23,7 +23,7 @@ COPY ./scripts /scripts
 RUN chmod +x /scripts/*
 ### DEVELOPERS/ADVANCED USERS ###
 # Clone oobabooga/text-generation-webui
-RUN git clone https://github.com/oobabooga/text-generation-webui /src
+RUN git clone https://github.com/oobabooga/textgen /src
 # Use script to check out specific version
 ARG VERSION_TAG
 ENV VERSION_TAG=${VERSION_TAG}
