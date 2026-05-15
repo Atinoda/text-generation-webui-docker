@@ -40,7 +40,7 @@ RUN cp -ar /src /app
 # Base
 FROM app_base AS app_nvidia
 # Install pytorch for CUDA 12.8
-RUN pip3 install torch==2.9.1 --index-url https://download.pytorch.org/whl/cu128
+RUN pip3 install torch==2.9.1 --index-url https://download.pytorch.org/whl/cu126
 # Install oobabooga/text-generation-webui
 RUN pip3 install -r /app/requirements/full/requirements.txt
 
